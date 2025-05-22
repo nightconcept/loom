@@ -1,0 +1,15 @@
+version: "1"
+threads:
+    - name: away
+      source: loom
+      files:
+        tests/:
+            - test.xml
+    - name: threada
+      source: project:.loom/threada
+      files:
+        ./:
+            - test.yaml
+
+
+

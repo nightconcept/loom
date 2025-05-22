@@ -1,0 +1,9 @@
+# thread_name/config.yml
+version: 1 # Version of the config.yml schema itself
+thread_version: "0.1.0" # Version of the thread's content
+metadata: # All metadata fields are optional
+  description: "An example thread to demonstrate Loom's capabilities."
+  author: "Loom AI Assistant <assistant@example.com>"
+  license: "MIT" # SPDX license identifier
+
+

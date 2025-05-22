@@ -1,0 +1,3719 @@
+Directory structure:
+└── loom/
+    ├── README.md
+    ├── go.mod
+    ├── go.sum
+    ├── loom.yaml
+    ├── .pre-commit-config.yaml
+    ├── cmd/
+    │   └── loom/
+    │       └── main.go
+    ├── docs/
+    │   ├── PRD.md
+    │   └── TASKS.md
+    ├── internal/
+    │   ├── cli/
+    │   │   ├── add/
+    │   │   │   └── add.go
+    │   │   ├── config/
+    │   │   │   └── config.go
+    │   │   ├── init/
+    │   │   │   └── init.go
+    │   │   ├── list/
+    │   │   │   └── list.go
+    │   │   ├── remove/
+    │   │   │   └── remove.go
+    │   │   └── weave/
+    │   │       └── weave.go
+    │   └── core/
+    │       ├── globalconfig/
+    │       │   └── globalconfig.go
+    │       └── project/
+    │           └── init.go
+    ├── test/
+    │   └── e2e/
+    │       ├── e2e_suite_test.go
+    │       ├── helpers_test.go
+    │       └── loom_cli_test.go
+    ├── .github/
+    │   ├── copilot-instructions.md
+    │   └── workflows/
+    │       └── ci.yml
+    └── .loom/
+        ├── example_thread/
+        │   ├── README.md
+        │   ├── LICENSE
+        │   ├── config.yml
+        │   └── _thread/
+        │       ├── test.yaml
+        │       └── tests/
+        │           └── test.xml
+        └── threada/
+            ├── README.md
+            ├── LICENSE
+            ├── config.yml
+            └── _thread/
+                └── test.yaml
+
+================================================
+File: README.md
+================================================
+# Loom - Scaffolding Tool
+
+
+
+
+
+
+================================================
+File: go.mod
+================================================
+module loom
+
+go 1.23.0
+
+toolchain go1.24.3
+
+require (
+	github.com/onsi/ginkgo/v2 v2.23.4
+	github.com/onsi/gomega v1.37.0
+	github.com/urfave/cli/v2 v2.27.6
+	gopkg.in/yaml.v3 v3.0.1
+)
+
+require (
+	github.com/cpuguy83/go-md2man/v2 v2.0.5 // indirect
+	github.com/go-logr/logr v1.4.2 // indirect
+	github.com/go-task/slim-sprig/v3 v3.0.0 // indirect
+	github.com/google/go-cmp v0.7.0 // indirect
+	github.com/google/pprof v0.0.0-20250403155104-27863c87afa6 // indirect
+	github.com/russross/blackfriday/v2 v2.1.0 // indirect
+	github.com/xrash/smetrics v0.0.0-20240521201337-686a1a2994c1 // indirect
+	go.uber.org/automaxprocs v1.6.0 // indirect
+	golang.org/x/net v0.37.0 // indirect
+	golang.org/x/sys v0.32.0 // indirect
+	golang.org/x/text v0.23.0 // indirect
+	golang.org/x/tools v0.31.0 // indirect
+)
+
+
+
+================================================
+File: go.sum
+================================================
+github.com/cpuguy83/go-md2man/v2 v2.0.5 h1:ZtcqGrnekaHpVLArFSe4HK5DoKx1T0rq2DwVB0alcyc=
+github.com/cpuguy83/go-md2man/v2 v2.0.5/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
+github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
+github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/go-logr/logr v1.4.2 h1:6pFjapn8bFcIbiKo3XT4j/BhANplGihG6tvd+8rYgrY=
+github.com/go-logr/logr v1.4.2/go.mod h1:9T104GzyrTigFIr8wt5mBrctHMim0Nb2HLGrmQ40KvY=
+github.com/go-task/slim-sprig/v3 v3.0.0 h1:sUs3vkvUymDpBKi3qH1YSqBQk9+9D/8M2mN1vB6EwHI=
+github.com/go-task/slim-sprig/v3 v3.0.0/go.mod h1:W848ghGpv3Qj3dhTPRyJypKRiqCdHZiAzKg9hl15HA8=
+github.com/google/go-cmp v0.7.0 h1:wk8382ETsv4JYUZwIsn6YpYiWiBsYLSJiTsyBybVuN8=
+github.com/google/go-cmp v0.7.0/go.mod h1:pXiqmnSA92OHEEa9HXL2W4E7lf9JzCmGVUdgjX3N/iU=
+github.com/google/pprof v0.0.0-20250403155104-27863c87afa6 h1:BHT72Gu3keYf3ZEu2J0b1vyeLSOYI8bm5wbJM/8yDe8=
+github.com/google/pprof v0.0.0-20250403155104-27863c87afa6/go.mod h1:boTsfXsheKC2y+lKOCMpSfarhxDeIzfZG1jqGcPl3cA=
+github.com/kr/pretty v0.1.0 h1:L/CwN0zerZDmRFUapSPitk6f+Q3+0za1rQkzVuMiMFI=
+github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=
+github.com/kr/text v0.2.0 h1:5Nx0Ya0ZqY2ygV366QzturHI13Jq95ApcVaJBhpS+AY=
+github.com/kr/text v0.2.0/go.mod h1:eLer722TekiGuMkidMxC/pM04lWEeraHUUmBw8l2grE=
+github.com/onsi/ginkgo/v2 v2.23.4 h1:ktYTpKJAVZnDT4VjxSbiBenUjmlL/5QkBEocaWXiQus=
+github.com/onsi/ginkgo/v2 v2.23.4/go.mod h1:Bt66ApGPBFzHyR+JO10Zbt0Gsp4uWxu5mIOTusL46e8=
+github.com/onsi/gomega v1.37.0 h1:CdEG8g0S133B4OswTDC/5XPSzE1OeP29QOioj2PID2Y=
+github.com/onsi/gomega v1.37.0/go.mod h1:8D9+Txp43QWKhM24yyOBEdpkzN8FvJyAwecBgsU4KU0=
+github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
+github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
+github.com/prashantv/gostub v1.1.0 h1:BTyx3RfQjRHnUWaGF9oQos79AlQ5k8WNktv7VGvVH4g=
+github.com/prashantv/gostub v1.1.0/go.mod h1:A5zLQHz7ieHGG7is6LLXLz7I8+3LZzsrV0P1IAHhP5U=
+github.com/russross/blackfriday/v2 v2.1.0 h1:JIOH55/0cWyOuilr9/qlrm0BSXldqnqwMsf35Ld67mk=
+github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
+github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcUk=
+github.com/stretchr/testify v1.8.4/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXlSw2iwfAo=
+github.com/urfave/cli/v2 v2.27.6 h1:VdRdS98FNhKZ8/Az8B7MTyGQmpIr36O1EHybx/LaZ4g=
+github.com/urfave/cli/v2 v2.27.6/go.mod h1:3Sevf16NykTbInEnD0yKkjDAeZDS0A6bzhBH5hrMvTQ=
+github.com/xrash/smetrics v0.0.0-20240521201337-686a1a2994c1 h1:gEOO8jv9F4OT7lGCjxCBTO/36wtF6j2nSip77qHd4x4=
+github.com/xrash/smetrics v0.0.0-20240521201337-686a1a2994c1/go.mod h1:Ohn+xnUBiLI6FVj/9LpzZWtj1/D6lUovWYBkxHVV3aM=
+go.uber.org/automaxprocs v1.6.0 h1:O3y2/QNTOdbF+e/dpXNNW7Rx2hZ4sTIPyybbxyNqTUs=
+go.uber.org/automaxprocs v1.6.0/go.mod h1:ifeIMSnPZuznNm6jmdzmU3/bfk01Fe2fotchwEFJ8r8=
+golang.org/x/net v0.37.0 h1:1zLorHbz+LYj7MQlSf1+2tPIIgibq2eL5xkrGk6f+2c=
+golang.org/x/net v0.37.0/go.mod h1:ivrbrMbzFq5J41QOQh0siUuly180yBYtLp+CKbEaFx8=
+golang.org/x/sys v0.32.0 h1:s77OFDvIQeibCmezSnk/q6iAfkdiQaJi4VzroCFrN20=
+golang.org/x/sys v0.32.0/go.mod h1:BJP2sWEmIv4KK5OTEluFJCKSidICx8ciO85XgH3Ak8k=
+golang.org/x/text v0.23.0 h1:D71I7dUrlY+VX0gQShAThNGHFxZ13dGLBHQLVl1mJlY=
+golang.org/x/text v0.23.0/go.mod h1:/BLNzu4aZCJ1+kcD0DNRotWKage4q2rGVAg4o22unh4=
+golang.org/x/tools v0.31.0 h1:0EedkvKDbh+qistFTd0Bcwe/YLh4vHwWEkiI0toFIBU=
+golang.org/x/tools v0.31.0/go.mod h1:naFTU+Cev749tSJRXJlna0T3WxKvb1kWEx15xA4SdmQ=
+google.golang.org/protobuf v1.36.5 h1:tPhr+woSbjfYvY6/GPufUoYizxw1cF/yFoxJ2fmpwlM=
+google.golang.org/protobuf v1.36.5/go.mod h1:9fA7Ob0pmnwhb644+1+CVWFRbNajQ6iRojtC/QF5bRE=
+gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
+gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 h1:qIbj1fsPNlZgppZ+VLlY7N33q108Sa+fhmuc+sWQYwY=
+gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
+gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
+gopkg.in/yaml.v3 v3.0.1/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
+
+
+
+
+
+
+================================================
+File: loom.yaml
+================================================
+version: "1"
+threads:
+    - name: away
+      source: loom
+      files:
+        tests/:
+            - test.xml
+    - name: threada
+      source: project:.loom/threada
+      files:
+        ./:
+            - test.yaml
+
+
+
+
+
+
+================================================
+File: .pre-commit-config.yaml
+================================================
+# Top-level pre-commit config for Go project
+repos:
+  - repo: local
+    hooks:
+      - id: gofmt
+        name: gofmt
+        entry: gofmt -l -w
+        language: golang
+        types: [go]
+      - id: go-vet
+        name: go vet
+        entry: go vet ./...
+        language: golang
+        types: [go]
+        pass_filenames: false
+      - id: go-mod-tidy
+        name: go mod tidy
+        entry: go mod tidy -v
+        language: golang
+        types: [go]
+        files: ^go\.(mod|sum)$
+        pass_filenames: false
+        always_run: true
+      - id: golangci-lint
+        name: golangci-lint
+        entry: golangci-lint run --fix
+        language: system
+        types: [go]
+        pass_filenames: false
+
+
+
+
+
+
+================================================
+File: cmd/loom/main.go
+================================================
+package main
+
+import (
+	"log"
+	"os"
+
+	addCmd "loom/internal/cli/add"
+	configCmd "loom/internal/cli/config" // Added for config command
+	initCmd "loom/internal/cli/init"
+	listCmd "loom/internal/cli/list"
+	removeCmd "loom/internal/cli/remove"
+	weaveCmd "loom/internal/cli/weave"
+
+	"github.com/urfave/cli/v2"
+)
+
+// VERSION is the current version of the Loom CLI
+const VERSION = "0.1.0"
+
+func main() {
+	app := &cli.App{
+		Name:    "loom",
+		Version: VERSION,
+		Usage:   "A command-line interface (CLI) tool for rapid project scaffolding",
+		Authors: []*cli.Author{
+			{
+				Name: "Loom Team",
+			},
+		},
+		Commands: []*cli.Command{
+			initCmd.Command(),
+			addCmd.Command(),
+			removeCmd.Command(),
+			{
+				Name:  "list",
+				Usage: "List threads in the project",
+				Action: func(c *cli.Context) error {
+					listCmd.ExecuteListCommand()
+					return nil
+				},
+			},
+			{
+				Name:    "weave",
+				Aliases: []string{"install"},
+				Usage:   "Install or re-apply threads to the project. Optionally specify a thread name to weave only that thread.",
+				Action: func(c *cli.Context) error {
+					threadName := "" // Default to empty, meaning all threads
+					if c.Args().Len() > 0 {
+						threadName = c.Args().First()
+					}
+					if err := weaveCmd.Weave(threadName); err != nil {
+						log.Printf("Error during weave: %v", err)
+						return err
+					}
+					return nil
+				},
+			},
+			configCmd.Command(), // Added the config command
+			{
+				Name:  "version",
+				Usage: "Print the version number of Loom CLI",
+				Action: func(c *cli.Context) error {
+					println(VERSION)
+					return nil
+				},
+			},
+		},
+	}
+
+	err := app.Run(os.Args)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+
+
+================================================
+File: docs/PRD.md
+================================================
+# Loom Scaffolding Tool - Product Requirements Document
+
+## 1. Introduction
+
+Loom (CLI command: `loom`) is a command-line interface (CLI) tool, built in Go, designed for rapid project scaffolding. It enables developers to quickly assemble new projects by combining pre-defined templates called "threads." These threads, which are essentially directories of code and files, can be sourced from local storage, project-specific directories, or remote GitHub repositories. Loom prioritizes speed and simplicity in project setup, offering a straightforward way to manage and "weave" these threads together, with interactive conflict resolution for overlapping files.
+
+## 2. Core Features
+
+- **Thread Management:**
+    - Add "threads" (pre-built templates/directories) to a project.
+    - Source threads from local file paths or GitHub repositories.
+- **Conflict Resolution:**
+    - Interactively prompt the user to choose which thread "owns" a file when file collisions occur between threads being added.
+- **Project Manifest:**
+    - Maintain a `loom.yaml` file within the project to track all included threads, their sources, and conflict resolution decisions.
+- **Thread Removal:**
+    - Remove specific threads from a project.
+    - Option to remove all threads from a project.
+- **Flexible Thread Stores:**
+    - **Local PC Store:** Store and access threads from a user-defined global directory on the local machine.
+    - **Project Store:** Store and access threads from a `.loom/` directory within the project itself.
+    - **GitHub Store:** Access threads directly from GitHub repositories.
+    - Opinionated default locations for local PC stores will be suggested/supported.
+- **Simplicity and Speed:**
+    - Focus on extremely fast project setup.
+    - Updates are brute-force: Loom replaces files based on the current state of the thread source. It does not manage versions with hashes or complex dependency trees.
+    - Intentionally simpler and with fewer guardrails than a full package management system.
+- **Future Considerations:**
+    - Templating language support for dynamic folder names and file content based on PC/user variables (see also Section 4.2 for `template_variables` in `config.yml`).
+
+## 3. Project Folder Structure (Using Loom)
+
+A typical project utilizing Loom might have the following structure:
+
+```
+- loom.yaml              # Loom manifest file (tracks threads, sources, conflicts)
+- .loom/                 # (Optional) Project-specific thread store
+- src/                   # Example project source code, partially or fully populated by threads
+- docs/                  # Example project documentation, potentially from threads
+- scripts/               # Example project scripts, potentially from threads
+- README.md              # Project README, potentially initiated by a thread
+- *(other project files and directories populated by threads)*
+```
+
+## 4. File & Directory Descriptions
+
+### 4.1. `loom.yaml` File
+
+The `loom.yaml` file is a project-specific manifest that Loom uses to keep track of the threads incorporated into the project. All paths defined within this file are relative to the project root.
+
+**Potential Structure (YAML):**
+
+```yaml
+# loom.yaml
+version: 1
+threads:
+  - name: "core-backend-structure"
+    source: "github:my-org/loom-threads/core-backend"
+    files: # Files this thread won, grouped by directory (paths relative to project root)
+      "src/config/":
+        - "base.go"
+        - "database.go"
+      "src/core/":
+        - "server.go"
+      "./": # Represents the project root
+        - ".gitignore"
+        - "README.md"
+  - name: "logging-module"
+    source: "local:/Users/username/.loom-store/common-threads/logging"
+    files:
+      "src/utils/logging/":
+        - "logger.go"
+        - "formatter.go"
+  - name: "project-specific-api"
+    source: "project:.loom/custom-api-thread"
+    files:
+      "api/":
+        - "routes.go"
+        - "handlers.go"
+# Further details to be refined; `last_weave_timestamp` is a potential future improvement.
+```
+
+- **version (integer):** Version of the `loom.yaml` file format.
+- **threads (list):** A list of thread objects.
+    - **name (string):** A unique name for the thread within the project.
+    - **source (string):** The URI or path indicating the thread's origin (e.g., `github:user/repo/path/to/thread`, `local:/path/to/thread`, `project:.loom/path/to/thread`).
+    - **files (map, optional):** A map where keys are directory paths (strings, relative to the project root, ending with a `/`) and values are lists of filenames (strings) within that directory that this thread "owns" as a result of conflict resolution. A key of `"./"` indicates files in the project root.
+
+### 4.2. Thread `config.yml`
+
+Located within a thread's directory (e.g., `thread_name/config.yml`).
+
+- **Purpose:** Stores metadata about the thread and definitions for future templating capabilities.
+    - **Current uses:**
+        - Storing metadata about the thread (description, author, version, license).
+    - **Future considerations:**
+        - Defining variables for templating features.
+        - Specifying dependencies on other threads (though current philosophy is against this).
+
+**Structure (YAML):**
+
+```yaml
+# thread_name/config.yml
+version: 1 # Version of the config.yml schema itself
+thread_version: "0.1.0" # Version of the thread's content, ideally following Conventional Commits
+metadata: # All metadata fields are optional
+  description: "A brief description of what this thread provides."
+  author: "Author Name <author@example.com>"
+  license: "MIT" # SPDX license identifier
+# Future Improvement:
+# template_variables:
+#   description: "Variables for templating file content or names."
+#   values:
+#     service_name: "default_service"
+#     default_port: 8080
+```
+
+### 4.3. Thread `_thread/` Directory
+
+Located within a thread's directory (e.g., `thread_name/_thread/`).
+
+- **Purpose:** This directory contains all the files and subdirectories that will be copied into the target project's root. The structure within `_thread/` is mirrored in the project.
+
+## 5. Commands
+
+Loom commands will be organized into modules, likely residing in a `modules/` subdirectory of the Go project. The main entry point (`main.go`) will parse arguments and dispatch to the appropriate module.
+
+- **`loom add <thread_source>`**
+    - Adds a new thread to the project.
+    - `<thread_source>`: URL or path to the thread (e.g., GitHub URL, local path).
+    - The thread's contents (from its `_thread` subfolder) are placed into the project root.
+    - Prompts for conflict resolution if files collide.
+    - Updates the `loom.yaml` file.
+
+- **`loom remove <thread_name_or_source> [*]`**
+    - Removes a thread from the project.
+    - `<thread_name_or_source>`: The name or source identifier of the thread to remove, as listed in `loom.yaml`.
+    - `*`: A special argument to remove all threads from the project.
+    - Removes files associated with the thread (respecting ownership if other threads also provided the file initially â€“ complex cases might require careful handling or simply remove files owned by this thread).
+    - Updates the `loom.yaml` file.
+
+- **`loom config <subcommand>`**
+    - Manages Loom's configuration for thread stores.
+    - **`loom config add <path_or_url>`**
+        - Adds a new thread store.
+        - `<path_or_url>`: Path for local store, base URL for GitHub store (e.g., `github:my-org/loom-threads`).
+    - **`loom config remove <name_or_path>`**
+        - Removes a configured thread store.
+
+- **`loom list`**
+    - Lists all threads available from configured stores.
+    - May also list threads currently active in the project (read from `loom.yaml`).
+
+- **`loom weave [thread_name]` (alias: `install`)**
+    - "Installs" or "weaves" threads into the project.
+    - If `[thread_name]` is provided, re-applies only that specific thread from its source to the project, overwriting existing files it owns.
+    - If no argument is provided, re-applies all threads listed in the `loom.yaml` file from their respective sources. This is the brute-force update mechanism.
+    - File conflicts resolved previously and recorded in `loom.yaml` will be respected. Re-prompting the user is a potential future improvement.
+
+## 6. Thread Design
+
+A "thread" is a self-contained template with a specific directory structure.
+
+- `thread_name/` (Root directory of the thread)
+    - `_thread/`
+        - All files and subdirectories within `_thread/` are intended to be copied directly into the root of the target project. The internal structure of `_thread/` is preserved.
+    - `README.md` (optional)
+        - Documentation for the thread itself: what it provides, how to use it, any configuration options.
+    - `LICENSE` (optional)
+        - License under which the thread's contents are provided.
+    - `config.yml` (see Section 4.2)
+        - Configuration and metadata for the thread.
+
+## 7. Stores
+
+Stores are locations where collections of threads are kept, using the "Thread Design" format described above.
+
+-   **GitHub Stores:**
+    -   A GitHub repository where each thread is a subdirectory within the repo (or the repo itself is a single thread).
+    -   The store URL would be the base path to these threads (e.g., `https://github.com/user/my-threads-repo`). Loom would then list/fetch `my-threads-repo/thread_A`, `my-threads-repo/thread_B`, etc.
+-   **Project Stores:**
+    -   Located within the user's project, typically in a `.loom/threads/` directory.
+    -   Allows for project-specific, reusable components that aren't meant to be global.
+-   **Local PC Stores:**
+    -   A user-configured directory on their local filesystem (e.g., `~/.config/loom/stores/my-local-threads` or `~/loom-threads`).
+    -   Loom will have an opinionated default location if not explicitly configured.
+-   **Store Configuration:**
+    -   The configuration for defined stores (paths, URLs, names) will be stored in a global Loom configuration file, likely located alongside the Loom CLI executable or in a standard user configuration directory (e.g., `~/.config/loom/config.yml`).
+
+## 8. Folder Structure (Loom Tool - Development and Deployed)
+
+### 8.1. Development Structure
+
+**Note:** The following structure is based on the `golang-standards/project-layout`. This means Go source code is organized into `cmd/`, `internal/`, and `pkg/` directories rather than a single top-level `src/` directory.
+
+```
+loom/
+â”œâ”€â”€ cmd/                      # Main applications for the project
+â”‚   â””â”€â”€ loom/                 # The Loom CLI application
+â”‚       â””â”€â”€ main.go           # Main entry point, CLI argument parsing, command dispatch
+â”œâ”€â”€ internal/                 # Private application and library code
+â”‚   â”œâ”€â”€ cli/                  # CLI command logic (previously src/modules)
+â”‚   â”‚   â”œâ”€â”€ add/
+â”‚   â”‚   â”‚   â””â”€â”€ add.go
+â”‚   â”‚   â”œâ”€â”€ init/             # Command for initializing a new loom project
+â”‚   â”‚   â”‚   â””â”€â”€ init.go
+â”‚   â”‚   â”œâ”€â”€ list/             # Command for listing threads
+â”‚   â”‚   â”‚   â””â”€â”€ list.go
+â”‚   â”‚   â”œâ”€â”€ remove/
+â”‚   â”‚   â”‚   â””â”€â”€ remove.go
+â”‚   â”‚   â”œâ”€â”€ weave/            # Command for weaving threads
+â”‚   â”‚   â”‚   â””â”€â”€ weave.go
+â”‚   â”‚   â”œâ”€â”€ config/           # Command for managing Loom configuration
+â”‚   â”‚   â”‚   â””â”€â”€ config.go
+â”‚   â”‚   â””â”€â”€ ...               # Other command modules (if any)
+â”‚   â”œâ”€â”€ core/                 # Core application logic (file ops, loom.yaml parsing, store mgmt - previously src/core)
+â”‚   â”‚   â””â”€â”€ ...
+â”‚   â”œâ”€â”€ util/                 # Utility functions (previously src/util)
+â”‚   â”‚   â””â”€â”€ ...
+â”œâ”€â”€ pkg/                      # Public library code reusable by other projects (if any - initially empty)
+â”‚   â””â”€â”€ ...
+â”œâ”€â”€ scripts/                  # Scripts for build, install, analysis, etc. (previously install/)
+â”‚   â”œâ”€â”€ install.sh            # Installer script for macOS/Linux
+â”‚   â””â”€â”€ install.ps1           # Installer script for Windows
+â”œâ”€â”€ configs/                  # Configuration files (e.g., for different environments - placeholder)
+â”œâ”€â”€ docs/                     # Loom tool's own documentation (user guides, design docs, etc.)
+â”œâ”€â”€ test/                     # Test data, E2E tests, or other non-unit tests
+â”‚   â””â”€â”€ e2e/                  # End-to-end tests
+â”‚       â””â”€â”€ ...
+â”œâ”€â”€ .github/                  # GitHub-specific files (workflows, issue templates)
+â”œâ”€â”€ go.mod                    # Go modules file
+â”œâ”€â”€ go.sum                    # Go checksum file
+â””â”€â”€ README.md                 # Project README for Loom development
+```
+
+### 8.2. Deployed Structure (Preliminary - Details for future finalization)
+
+The exact deployed structure is to be determined as a future improvement, but might look like:
+
+**macOS/Linux:**
+```
+/usr/local/bin/loom or ~/.local/bin/loom (the main executable wrapper)
+
+~/.config/loom/
+    config.yml (global Loom configuration, stores, etc.)
+    default_store/ (optional default local PC store)
+
+Potentially an install/ directory if Loom manages its own updates:
+~/.local/share/loom/install/
+    next/ (for staging updates)
+    update_pending/ (flag or data for pending updates)
+```
+
+**Windows:**
+```
+C:\Program Files\Loom\loom.exe or %LOCALAPPDATA%\Loom\loom.exe
+
+%APPDATA%\Loom\ or %LOCALAPPDATA%\Loom\
+    config.yml
+    default_store/
+
+Update mechanism TBD.
+```
+
+## 9. Conclusion
+
+Loom aims to be a developer-friendly tool that significantly accelerates the initial setup phase of projects. By leveraging reusable "threads" and a simple, direct approach to file management, Loom allows developers to focus on building features rather than boilerplate, without the overhead of complex dependency management systems. Its core philosophy is speed and ease of use for scaffolding.
+
+## 10. Tech Stack
+
+-   **Language:** Go (Golang)
+    -   **CLI Framework:** `urfave/cli`
+-   **Platform:** Cross-platform (macOS, Linux, Windows)
+
+## 11. Project-Specific Coding Rules (Go)
+
+These rules supplement any global AI project guidelines and define standards specific to the Loom Go project.
+
+### 11.1. Language & Environment
+
+-   **Go Version:** Target the latest stable Go version (e.g., Go 1.21+ or as decided by the team). Specify in `go.mod`.
+-   **Modules:** Use Go Modules for dependency management.
+
+### 11.2. Go Coding Standards
+
+#### 11.2.1. Style & Formatting
+
+-   **Formatting:** All Go code must be formatted with `gofmt` (or `goimports`). Configure IDEs/editors to format on save.
+-   **Linting:** Use `golangci-lint` with a pre-defined configuration to enforce a common set of linters (e.g., `errcheck`, `govet`, `staticcheck`, `unused`, `stylecheck`).
+-   **Line Length:** Aim for a reasonable line length (e.g., 100-120 characters), but prioritize clarity over strict adherence if a longer line is more readable.
+-   **Naming Conventions:**
+    -   Follow standard Go naming conventions (e.g., `camelCase` for local variables and parameters, `PascalCase` for exported identifiers).
+    -   Package names should be short, concise, and lowercase.
+    -   Strive for descriptive names. Single-letter variables are acceptable for very short scopes or idiomatic loops (e.g., `i`, `k`, `v`).
+-   **Error Handling:**
+    -   Errors are values. Handle errors explicitly; do not ignore them using `_` unless there's a very deliberate reason (and comment it).
+    -   Use `fmt.Errorf` with `%w` to wrap errors for context, or use custom error types where appropriate.
+    -   Error messages should be lowercase and not end with punctuation.
+-   **Concurrency:**
+    -   Use goroutines and channels judiciously.
+    -   Be mindful of race conditions; use the race detector (`go test -race`).
+    -   Prefer channels for synchronization and communication where idiomatic.
+
+#### 11.2.2. Documentation & Comments
+
+-   **Godoc:** All exported identifiers (variables, functions, types, constants) must have godoc comments.
+    -   Comments should start with the name of the thing being described.
+    -   Provide clear, concise explanations of purpose, behavior, parameters, and return values.
+-   **Package Comments:** Each package should have a package comment (`// package mypackage ...`) explaining its role.
+-   **Inline Comments:** Use inline comments (`//`) to explain complex, non-obvious, or important sections of code. Avoid commenting on obvious code.
+
+#### 11.2.3. Testing
+
+-   **Standard Library:** Use the standard `testing` package for unit and integration tests.
+-   **Test Files:** Test files should be named `_test.go` (e.g., `myfile_test.go`).
+-   **Coverage:** Aim for high test coverage. Use `go test -cover` to check.
+-   **Table-Driven Tests:** Use table-driven tests for testing multiple scenarios of a function.
+-   **Testable Code:** Write code that is easily testable (e.g., by decoupling dependencies, using interfaces).
+
+#### 11.2.4. Project Structure
+
+-   **Layout:** Adhere to the `golang-standards/project-layout` as described in Section 8.1 of this document.
+    -   `cmd/loom/main.go`: Main application entry point.
+    -   `internal/`: Contains all private application code, organized into sub-packages like `cli` (for command-specific logic), `core` (for business logic), and `util` (for shared utilities). This code is not importable by other projects.
+    -   `pkg/`: (If applicable) For code that is intended to be used as a public library by other projects.
+-   **Unit Tests:** Co-locate unit tests with the code they are testing. Test files should be named `_test.go` (e.g., `myfile_test.go` alongside `myfile.go`).
+-   **E2E/Integration Tests:** Place end-to-end or integration tests in the top-level `/test` directory (e.g., `/test/e2e/`).
+-   Internal packages (not meant to be imported by other projects) should reside within `internal/`.
+
+
+
+
+
+================================================
+File: docs/TASKS.md
+================================================
+# Task Checklist
+
+**Purpose:** Tracks all tasks, milestones, and backlog for the Loom scaffolding tool. Each task includes a manual verification step.
+
+**Multiplatform Policy:** All tasks, implementations, and verifications MUST consider cross-platform compatibility (Linux, macOS, and Windows) unless otherwise specified. Contributors (including AI) are required to design, implement, and test with multiplatform support as a baseline expectation. Any platform-specific logic must be clearly documented and justified in both code and task notes.
+
+---
+
+## CLI Tool Name
+
+- The CLI executable is called `loom`.
+- All documentation, usage, and examples should refer to the CLI as `loom`.
+
+---
+
+## Milestone 1: Core Manifest and Project Initialization (YYYY-MM-DD)
+
+- [x] **Task 1.1: Design and define `loom.yaml` schema (YYYY-MM-DD)**
+  - [x] Define fields: `version`, `threads` (with `name`, `source`, `files`).
+  - [x] Manual Verification: Review schema against PRD.md, create a sample `loom.yaml` file, and validate its structure.
+
+- [x] **Task 1.2: Basic CLI structure and entry point (YYYY-MM-DD)**
+  - [x] Set up Go project structure (`cmd/loom/main.go`, `internal/`, etc.) as per PRD Section 8.1.
+  - [x] Implement CLI argument parsing using `urfave/cli`.
+  - [x] Manual Verification: Build and run `loom --version`, `loom --help`.
+
+- [x] **Task 1.3: Implement `loom init` (Placeholder - if needed for `loom.yaml` creation) (YYYY-MM-DD)**
+  - [x] If `loom.yaml` is not automatically created by other commands, implement `loom init` to create a basic `loom.yaml`.
+  - [x] Manual Verification: Run `loom init`, check for `loom.yaml` creation.
+
+## Milestone 2: Thread Definition and Local Operations (YYYY-MM-DD)
+
+- [x] **Task 2.1: Define Thread Structure and `config.yml` (2025-05-06)**
+  - [x] Establish standard thread directory structure: `thread_name/_thread/`, `thread_name/config.yml`, `thread_name/README.md` (optional), `thread_name/LICENSE` (optional).
+  - [x] Define `config.yml` schema: `version`, `thread_version`, `metadata` (description, author, license).
+  - [x] Manual Verification: Create a sample thread adhering to the structure and `config.yml` schema.
+
+- [x] **Task 2.2: Implement `loom add <name_of_thread>` (YYYY-MM-DD)**
+  - [x] Search for thread in the `.loom/` folder of the project.
+  - [x] Copy contents of the thread's `_thread/` directory to the project root.
+  - [x] Add entry to `loom.yaml` (initially without `files`).
+  - [x] Manual Verification: Add a local thread, check files are copied, and `loom.yaml` is updated.
+
+- [x] **Task 2.3: Implement `loom weave` (Initial for all project threads) (YYYY-MM-DD)**
+  - [x] Re-apply all threads listed in `loom.yaml` from their sources in sequential (top to bottom) order.
+  - [x] For now, this will be a brute-force overwrite for files from local threads.
+  - [x] Manual Verification: Modify a file provided by a thread, run `loom weave`, verify file is reverted to thread's version.
+
+- [x] **Task 2.4: Implement `loom list` (Project threads) (2025-05-07)**
+  - [x] List threads currently active in the project by reading `loom.yaml`.
+  - [x] Manual Verification: Add a thread, run `loom list`, verify output.
+
+- [x] **Task 2.4.5: Update `loom add` to track files per thread (YYYY-MM-DD)**
+  - [x] Modify `loom add` to record all files added by each thread in the `loom.yaml` file.
+  - [x] Store files under each thread's entry using the directory structure format specified in the PRD (`files` map with directory paths as keys and lists of filenames as values).
+  - [x] Manual Verification: Add a thread, verify `loom.yaml` correctly lists all files copied from the thread's `_thread/` directory.
+
+- [x] **Task 2.5: Implement `loom remove <thread_name>` (2025-05-08)**
+  - [x] Remove thread entry from `loom.yaml`.
+  - [x] Remove files owned by the thread (simple removal for now, conflict/shared files later).
+  - [x] Manual Verification: Add a thread, then remove it. Verify files are removed and `loom.yaml` is updated.
+
+## Milestone 3: Conflict Resolution (YYYY-MM-DD)
+
+- [x] **Task 3.1: Implement interactive conflict resolution for `loom add` / `loom weave` (2025-05-08)**
+  - [x] When a file collision occurs, prompt the user to choose which thread "owns" the file.
+  - [x] Manual Verification: Add two threads with an overlapping file, verify prompt and resolution.
+
+- [x] **Task 3.2: Update `loom.yaml` with `files` (2025-05-08)**
+  - [x] Store conflict resolution choices in `loom.yaml` under the winning thread's `files` map.
+  - [x] Ensure `loom weave` respects these ownership rules.
+  - [x] Manual Verification: Resolve a conflict, inspect `loom.yaml`. Run `loom weave`, verify owned files are correctly applied.
+
+## Milestone 4: Thread Stores (YYYY-MM-DD)
+
+- [x] **Task 4.1: Implement Local PC Store (`loom config add <path>`) (2025-05-09)**
+  - [x] Store configuration in a global Loom config file (e.g., `~/.config/loom/config.yml`).
+  - [x] Allow adding a local directory as a named thread store.
+  - [x] Manual Verification: Add a local PC store, verify global config.
+
+- [x] **Task 4.2: Update `loom add` to use Local PC Store threads (2025-05-09)**
+  - [x] Allow `loom add <thread_name>` or similar syntax but prioritize the project's threads first. The next priority should be local PC stores.
+  - [x] Manual Verification: Add a thread from a configured local PC store.
+
+- [x] **Task 4.3: Implement Project Store (YYYY-MM-DD)**
+  - [x] Support sourcing threads from a `.loom/` directory within the project.
+  - [x] Update `loom add` to use project store threads (e.g., `loom add project:<thread_name_in_.loom>`).
+  - [x] Manual Verification: Create a thread in `.loom/threads/`, add it to the project.
+
+- [ ] **Task 4.4: Implement GitHub Store (`loom config add github <base_url> [name]`) (YYYY-MM-DD)**
+  - [ ] Allow adding a GitHub repository base URL as a named thread store.
+  - [ ] Manual Verification: Add a GitHub store, verify global config.
+
+- [ ] **Task 4.5: Update `loom add` to use GitHub Store threads (YYYY-MM-DD)**
+  - [ ] Implement logic to fetch thread contents from GitHub (e.g., `loom add github:user/repo/path/to/thread` or `loom add <github_store_name>/<thread_name>`).
+  - [ ] Manual Verification: Add a thread from a configured GitHub store or direct GitHub URL.
+
+- [x] **Task 4.6: Update `loom list` to show available store threads (2025-05-13)**
+  - [x] Extend `loom list` to show threads available from all configured stores.
+  - [x] Manual Verification: Configure stores, run `loom list`, verify output.
+
+- [x] **Task 4.7: Refactor `loom config add` to infer type and name (2025-05-13)**
+  - [x] Modify `loom config add` to only require a single `<path_or_url>` argument.
+  - [x] Infer store type (local, github) from the argument.
+  - [x] Infer store name (basename for local, repo name for GitHub).
+  - [x] Prevent adding stores with duplicate paths/URLs (case-insensitive).
+  - [x] Prompt for a custom name if the inferred name conflicts with an existing store but the path/URL is unique.
+  - [x] Manual Verification:
+    - Add a local store using a path, verify type and name are inferred.
+    - Attempt to add the same local store path again, verify error.
+    - Add a local store with a path that results in a conflicting name (but different path), verify prompt for new name.
+    - (Future) Add a GitHub store using a URL, verify type and name are inferred.
+    - (Future) Attempt to add the same GitHub URL again, verify error.
+    - (Future) Add a GitHub store with a URL that results in a conflicting name (but different URL), verify prompt for new name.
+
+- [x] **Task 4.7: Implement `loom config remove <name_or_path>` (2025-05-14)**
+  - [x] Remove a configured thread store from the global Loom config.
+  - [x] Manual Verification: Add a store, then remove it. Verify global config.
+
+- [x] **Task 4.8: Implement `loom config list` (2025-05-14)**
+  - [x] List all configured thread stores with their names, types, and paths/URLs.
+  - [x] Manual Verification: Add a few stores, run `loom config list`, verify output. Remove a store, run `loom config list` again, verify.
+
+## Milestone 5: Advanced Commands & Refinements (YYYY-MM-DD)
+
+- [x] **Task 5.1: Implement `loom weave [thread_name]` (2025-05-14)**
+  - [x] Re-apply only the specified thread from its source, respecting its owned files.
+  - [x] Manual Verification: Modify a file from a specific thread, run `loom weave <thread_name>`, verify only that thread's files are affected.
+
+- [x] **Task 5.2: Implement `loom remove *` (2025-05-14)**
+  - [x] Remove all threads from the project and clear `loom.yaml`.
+  - [x] Remove all files that were owned by any thread (careful with shared files not owned by any removed thread - initial simple approach: remove all files listed in any `files`).
+  - [x] Manual Verification: Add multiple threads, run `loom remove *`, verify project is cleaned.
+
+## Milestone 6: Documentation, Testing, and Go Standards (Ongoing) (YYYY-MM-DD)
+
+- [ ] **Task 6.1: Create User Documentation (README.md for Loom tool) (YYYY-MM-DD)**
+  - [ ] Document all commands, `loom.yaml` structure, thread design, and store configuration.
+  - [ ] Manual Verification: Review README for clarity, completeness, and accuracy.
+
+- [x] **Task 6.2: Implement Go Coding Standards (Ongoing) (2025-05-14)**
+  - [x] Ensure all Go code is formatted with `gofmt`/`goimports`.
+  - [x] Set up and use `golangci-lint` with a standard configuration.
+  - [x] All exported identifiers have godoc comments.
+  - [x] Packages have package comments.
+  - [x] Adhere to error handling and naming conventions from PRD.md Section 11.2.
+  - [x] Reduce cyclomatic complexity of `add.Command()`
+  - [ ] Manual Verification: Periodically review code quality and linting results.
+
+- [ ] **Task 6.3: Develop Unit Tests (Ongoing) (YYYY-MM-DD)**
+  - [ ] Write unit tests for core logic in `internal/core`, `internal/cli` modules.
+  - [ ] Use the standard `testing` package. Test files named `_test.go`.
+  - [ ] Aim for high test coverage.
+  - [ ] Manual Verification: Run `go test ./...`, check coverage reports.
+
+- [ ] **Task 6.4: Develop E2E Tests (Ongoing) (YYYY-MM-DD)**
+  - [ ] Create end-to-end tests in the `/test/e2e/` directory.
+  - [ ] Tests should cover CLI command workflows (add, remove, weave, list, config).
+  - [ ] **`loom add` command E2E Test Scenarios:**
+    - [ ] **Argument Parsing:**
+      - [ ] Test `loom add` with no arguments (should fail with usage message).
+      - [ ] Test `loom add /` (invalid format).
+      - [ ] Test `loom add store/` (invalid format - missing thread name).
+      - [ ] Test `loom add /thread` (invalid format - missing store name).
+    - [ ] **Thread Source and Resolution:**
+      - [ ] Test adding a thread that already exists in the project's local `.loom/` directory.
+      - [ ] Test adding a thread by explicitly specifying an existing store name (e.g., `loom add myStore/myTestThread`).
+      - [ ] Test error: Thread not found in the specified store.
+      - [ ] Test error: Specified store name does not exist in global configuration.
+      - [ ] Test error: Thread not found in any configured store or project `.loom/` folder.
+    - [ ] **File Conflict Handling (requires mechanism for non-interactive test or --force flag):**
+      - [ ] Test adding a thread when a file to be copied already exists and is owned by the *same thread* (should overwrite).
+      - [ ] Test adding a thread when a file to be copied already exists and is owned by a *different thread* (verify prompt or behavior with non-interactive flag).
+      - [ ] Test adding a thread when a file to be copied already exists and is *unowned* (verify prompt or behavior with non-interactive flag).
+    - [ ] **Project `loom.yaml` Manipulation:**
+      - [ ] Test updating an *existing* thread entry in `loom.yaml` (e.g., re-adding a thread, potentially from a different source).
+      - [ ] Test `removeFileFromOtherThreads` logic during conflict resolution (if a file changes ownership).
+      - [ ] Test adding a thread when `loom.yaml` is present but malformed (e.g., invalid YAML).
+    - [ ] **Extraneous Arguments:**
+      - [ ] Test `loom add myThread extraneousArg` (should ideally ignore extraneous args or error gracefully depending on CLI library behavior).
+  - [ ] Manual Verification: Run E2E tests, verify they cover primary use cases.
+
+## Milestone 7: Future Considerations (Placeholder) (YYYY-MM-DD)
+
+- [ ] **Task 7.1: Investigate templating language support (YYYY-MM-DD)**
+  - [ ] Research options for dynamic folder names and file content based on variables (as per PRD Section 2 and 4.2).
+  - [ ] Manual Verification: Document findings and potential approaches.
+
+- [ ] **Task 7.2: Refine Deployed Structure and Installers (YYYY-MM-DD)**
+  - [ ] Finalize deployed structure for macOS, Linux, and Windows (PRD Section 8.2).
+  - [ ] Develop installer scripts (`install.sh`, `install.ps1`) as per PRD Section 8.1.
+  - [ ] Manual Verification: Test installers on all target platforms.
+
+*Last updated: 2025-05-09*
+
+
+
+
+
+
+================================================
+File: internal/cli/add/add.go
+================================================
+package add
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
+
+	"loom/internal/core/globalconfig" // Import the globalconfig package
+	"loom/internal/core/project"      // Import the project package
+
+	"github.com/urfave/cli/v2"
+	"gopkg.in/yaml.v3"
+)
+
+// Remove local LoomConfig and Thread structs, use project package versions
+
+// parseAddArgs parses the command line arguments for the add command.
+// It returns the target store name, thread name, and an error if parsing fails.
+func parseAddArgs(fullThreadArg string) (string, string, error) {
+	if fullThreadArg == "" {
+		return "", "", fmt.Errorf("thread name or store/thread is required")
+	}
+
+	var targetStoreName string
+	var threadName string
+	parts := strings.SplitN(fullThreadArg, "/", 2)
+	if len(parts) == 2 {
+		targetStoreName = parts[0]
+		threadName = parts[1]
+		if targetStoreName == "" || threadName == "" {
+			return "", "", fmt.Errorf("invalid format for store/thread: '%s'. Both store name and thread name must be specified", fullThreadArg)
+		}
+	} else {
+		threadName = fullThreadArg
+	}
+	return targetStoreName, threadName, nil
+}
+
+// loadProjectLoomConfig loads the loom.yaml configuration from the project root.
+// If the file doesn't exist, it initializes an empty configuration.
+// It returns the loaded config, the path to the config file, and an error if any.
+func loadProjectLoomConfig(projectRoot string) (project.LoomConfig, string, error) {
+	loomConfigPath := filepath.Join(projectRoot, project.YamlFileName)
+	var loomConfig project.LoomConfig
+	configData, err := os.ReadFile(loomConfigPath)
+	if err != nil {
+		if !os.IsNotExist(err) {
+			return loomConfig, loomConfigPath, fmt.Errorf("failed to read %s: %w", project.YamlFileName, err)
+		}
+		// Initialize empty config if loom.yaml doesn't exist
+		loomConfig = project.LoomConfig{Version: "1", Threads: []project.Thread{}}
+	} else {
+		err = yaml.Unmarshal(configData, &loomConfig)
+		if err != nil {
+			return loomConfig, loomConfigPath, fmt.Errorf("failed to parse %s: %w", project.YamlFileName, err)
+		}
+	}
+	return loomConfig, loomConfigPath, nil
+}
+
+// findThreadInProjectStore searches for a thread in the project's .loom directory.
+// It returns the thread path, thread source, a boolean indicating if found, and an error.
+func findThreadInProjectStore(projectRoot, threadName string) (string, string, bool, error) {
+	projectThreadPath := filepath.Join(projectRoot, ".loom", threadName, "_thread")
+	_, err := os.Stat(projectThreadPath)
+	if err == nil {
+		threadSource := fmt.Sprintf("project:.loom/%s", threadName)
+		return projectThreadPath, threadSource, true, nil
+	}
+	if os.IsNotExist(err) {
+		return "", "", false, nil
+	}
+	return "", "", false, err
+}
+
+// findThreadInLocalStores searches for a thread in the configured local PC stores.
+// It returns the thread path, thread source, a boolean indicating if found, and an error.
+func findThreadInLocalStores(targetStoreName, threadName string, gConf *globalconfig.GlobalLoomConfig) (string, string, bool, error) {
+	for _, store := range gConf.Stores {
+		if targetStoreName != "" && store.Name != targetStoreName {
+			continue
+		}
+		if store.Type == "local" {
+			potentialThreadPath := filepath.Join(store.Path, threadName, "_thread")
+			fileInfo, err := os.Stat(potentialThreadPath)
+			if err == nil {
+				if fileInfo.IsDir() {
+					return potentialThreadPath, store.Name, true, nil
+				} else {
+					// If the path exists but is not a directory, it's a malformed thread.
+					return "", "", false, fmt.Errorf("thread path '%s' in store '%s' is a file, not a directory", potentialThreadPath, store.Name)
+				}
+			} else if !os.IsNotExist(err) {
+				return "", "", false, fmt.Errorf("error accessing thread '%s' in store '%s' (%s): %w", threadName, store.Name, potentialThreadPath, err)
+			}
+		}
+	}
+	return "", "", false, nil
+}
+
+// handleThreadSearch orchestrates the search for a thread, first in the project store, then in local stores.
+func handleThreadSearch(projectRoot, targetStoreName, threadName string) (string, string, error) {
+	// Try project store first only if no specific store is targeted
+	if targetStoreName == "" {
+		threadPath, threadSource, foundInProject, err := findThreadInProjectStore(projectRoot, threadName)
+		if err != nil {
+			return "", "", fmt.Errorf("error searching in project store: %w", err)
+		}
+		if foundInProject {
+			return threadPath, threadSource, nil
+		}
+	}
+
+	gConf, err := globalconfig.LoadGlobalConfig()
+	if err != nil {
+		return "", "", fmt.Errorf("failed to load global loom configuration: %w", err)
+	}
+
+	threadPath, threadSource, foundInLocal, err := findThreadInLocalStores(targetStoreName, threadName, gConf)
+	if err != nil {
+		return "", "", fmt.Errorf("error searching in local stores: %w", err)
+	}
+
+	if foundInLocal {
+		return threadPath, threadSource, nil
+	}
+
+	// Error messages if not found
+	if targetStoreName != "" {
+		storeExists := false
+		for _, store := range gConf.Stores {
+			if store.Name == targetStoreName {
+				storeExists = true
+				break
+			}
+		}
+		if !storeExists {
+			return "", "", fmt.Errorf("specified store '%s' not found in global configuration", targetStoreName)
+		}
+		return "", "", fmt.Errorf("thread '%s' not found in specified store '%s'", threadName, targetStoreName)
+	}
+	return "", "", fmt.Errorf("thread '%s' not found in project's .loom folder or any configured local PC stores", threadName)
+}
+
+func Command() *cli.Command {
+	return &cli.Command{
+		Name:  "add",
+		Usage: "Add a thread to the project. Syntax: loom add <thread_name> OR loom add <store_name>/<thread_name>",
+		Action: func(c *cli.Context) error {
+			fullThreadArg := c.Args().First()
+			targetStoreName, threadName, err := parseAddArgs(fullThreadArg)
+			if err != nil {
+				return err
+			}
+
+			projectRoot, err := os.Getwd()
+			if err != nil {
+				return fmt.Errorf("failed to get current directory: %v", err)
+			}
+
+			loomConfig, loomConfigPath, err := loadProjectLoomConfig(projectRoot)
+			if err != nil {
+				return err // Error already formatted by loadProjectLoomConfig
+			}
+
+			threadPath, threadSource, err := handleThreadSearch(projectRoot, targetStoreName, threadName)
+			if err != nil {
+				return err
+			}
+			// Safeguard, though handleThreadSearch should error out if not found.
+			if threadPath == "" {
+				return fmt.Errorf("thread '%s' not found after search (unexpected)", fullThreadArg)
+			}
+
+			filesByDir, err := copyDir(threadPath, projectRoot, threadName, threadSource, &loomConfig)
+			if err != nil {
+				return fmt.Errorf("failed to copy thread files: %v", err)
+			}
+
+			err = updateLoomConfig(loomConfigPath, threadName, threadSource, filesByDir, &loomConfig)
+			if err != nil {
+				return fmt.Errorf("failed to update %s: %v", project.YamlFileName, err)
+			}
+
+			fmt.Printf("Thread '%s' added successfully from %s\n", fullThreadArg, threadSource)
+			return nil
+		},
+	}
+}
+
+// copyDir recursively copies files from src to dest and tracks the files by their directory structure
+// relative to the project root. It returns a map where keys are directory paths (with trailing slash)
+// It now includes conflict resolution.
+func copyDir(src string, dest string, currentThreadName string, displayCurrentThreadSource string, loomConfig *project.LoomConfig) (map[string][]string, error) {
+	// We need to track the original project root to calculate relative paths correctly
+	// Ensure the base destination directory exists
+	if err := os.MkdirAll(dest, os.ModePerm); err != nil {
+		return nil, fmt.Errorf("failed to create base destination directory %s: %w", dest, err)
+	}
+	return copyDirWithBasePath(src, dest, dest, currentThreadName, displayCurrentThreadSource, loomConfig)
+}
+
+// handleExistingFileConflict checks if a file at destPath conflicts with the thread being added.
+// It prompts the user if necessary and returns true if the file should be overwritten,
+// false if it should be skipped, and an error if a critical issue occurs (e.g., stat fails unexpectedly, prompt fails).
+func handleExistingFileConflict(destPath, baseProjectPath, displayCurrentThreadSource string, loomConfig *project.LoomConfig) (bool, error) {
+	// Check if the file already exists in the destination
+	_, statErr := os.Stat(destPath)
+	if statErr == nil { // File exists
+		ownerThreadNameFromConfig, isOwned := loomConfig.IsFileOwned(destPath, baseProjectPath)
+		relDestPath, err := filepath.Rel(baseProjectPath, destPath)
+		if err != nil {
+			// Treat failure to determine relative path as a fatal error.
+			// This makes the error handling stricter for path resolution issues.
+			return false, fmt.Errorf("failed to determine relative path for '%s' from base '%s': %w", destPath, baseProjectPath, err)
+		}
+
+		if isOwned {
+			var ownerThreadSourceFromConfig string
+			for _, t := range loomConfig.Threads {
+				if t.Name == ownerThreadNameFromConfig {
+					ownerThreadSourceFromConfig = t.Source
+					break
+				}
+			}
+			if ownerThreadSourceFromConfig == "" {
+				ownerThreadSourceFromConfig = ownerThreadNameFromConfig
+			}
+
+			if ownerThreadSourceFromConfig == displayCurrentThreadSource {
+				return true, nil
+			}
+			fmt.Printf("File '%s' is currently owned by thread '%s'.\n", relDestPath, ownerThreadSourceFromConfig)
+			choice, promptErr := promptUserForOverwrite(fmt.Sprintf("Do you want thread '%s' to take ownership of '%s' and overwrite it?", displayCurrentThreadSource, relDestPath))
+			if promptErr != nil {
+				return false, fmt.Errorf("failed to get user input for %s: %w", relDestPath, promptErr)
+			}
+
+			if choice == "yes" {
+				fmt.Printf("Thread '%s' is taking ownership of '%s'.\n", displayCurrentThreadSource, relDestPath)
+				return true, nil
+			}
+			fmt.Printf("Skipping file '%s'. Thread '%s' retains ownership.\n", relDestPath, ownerThreadSourceFromConfig)
+			return false, nil
+		}
+		fmt.Printf("File '%s' exists but is not currently owned by any Loom thread.\n", relDestPath)
+		choice, promptErr := promptUserForOverwrite(fmt.Sprintf("Do you want thread '%s' to take ownership of '%s' and overwrite it?", displayCurrentThreadSource, relDestPath))
+		if promptErr != nil {
+			return false, fmt.Errorf("failed to get user input for %s: %w", relDestPath, promptErr)
+		}
+		if choice == "yes" {
+			fmt.Printf("Thread '%s' is taking ownership of '%s'.\n", displayCurrentThreadSource, relDestPath)
+			return true, nil
+		}
+		fmt.Printf("Skipping file '%s'. It remains an unmanaged file or user version.\n", relDestPath)
+		return false, nil
+	} else if os.IsNotExist(statErr) {
+		return true, nil
+	}
+	return false, fmt.Errorf("failed to stat destination path %s: %w", destPath, statErr)
+}
+
+// _processFileCopy handles the logic for copying a single file, including conflict resolution.
+// It returns the relative directory path (e.g., "./", "subdir/") and the file name if the file was successfully copied,
+// or empty strings and potentially an error if skipped or an error occurred.
+func _processFileCopy(srcPath, destPath, baseProjectPath, currentThreadName, displayCurrentThreadSource string, srcFileInfo os.FileInfo, loomConfig *project.LoomConfig) (string, string, error) {
+	destFileDir := filepath.Dir(destPath)
+	if err := os.MkdirAll(destFileDir, os.ModePerm); err != nil {
+		return "", "", fmt.Errorf("failed to create parent directory for destination file %s: %w", destPath, err)
+	}
+
+	shouldOverwrite, conflictErr := handleExistingFileConflict(destPath, baseProjectPath, displayCurrentThreadSource, loomConfig)
+	if conflictErr != nil {
+		return "", "", conflictErr
+	}
+
+	if !shouldOverwrite {
+		return "", "", nil // Skipped
+	}
+
+	data, err := os.ReadFile(srcPath)
+	if err != nil {
+		return "", "", fmt.Errorf("failed to read source file %s: %w", srcPath, err)
+	}
+	err = os.WriteFile(destPath, data, srcFileInfo.Mode())
+	if err != nil {
+		return "", "", fmt.Errorf("failed to write destination file %s: %w", destPath, err)
+	}
+
+	relDir := "./"
+	if destFileDir != baseProjectPath {
+		relPathCurrent, err := filepath.Rel(baseProjectPath, destFileDir)
+		if err != nil {
+			return "", "", fmt.Errorf("failed to get relative path for %s from %s: %w", destFileDir, baseProjectPath, err)
+		}
+		if relPathCurrent == "." {
+			relDir = "./"
+		} else {
+			relDir = filepath.ToSlash(relPathCurrent) + "/"
+		}
+	}
+	return relDir, srcFileInfo.Name(), nil
+}
+
+// copyDirWithBasePath is an internal helper that maintains the base project path during recursion
+// It now includes conflict resolution.
+func copyDirWithBasePath(src string, dest string, baseProjectPath string, currentThreadName string, displayCurrentThreadSource string, loomConfig *project.LoomConfig) (map[string][]string, error) {
+	filesByDir := make(map[string][]string)
+	entries, err := os.ReadDir(src)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read source directory %s: %w", src, err)
+	}
+
+	for _, entry := range entries {
+		srcPath := filepath.Join(src, entry.Name())
+		destPath := filepath.Join(dest, entry.Name())
+
+		srcFileInfo, err := entry.Info()
+		if err != nil {
+			return nil, fmt.Errorf("failed to get FileInfo for source %s: %w", srcPath, err)
+		}
+
+		if entry.IsDir() {
+			if err := os.MkdirAll(destPath, srcFileInfo.Mode()); err != nil {
+				return nil, fmt.Errorf("failed to create destination directory %s: %w", destPath, err)
+			}
+
+			subFilesByDir, err := copyDirWithBasePath(srcPath, destPath, baseProjectPath, currentThreadName, displayCurrentThreadSource, loomConfig)
+			if err != nil {
+				return nil, err // Propagate error from recursive call
+			}
+			for dir, files := range subFilesByDir {
+				filesByDir[dir] = append(filesByDir[dir], files...)
+			}
+		} else {
+			// Process file using the new helper function
+			relDir, fileName, err := _processFileCopy(srcPath, destPath, baseProjectPath, currentThreadName, displayCurrentThreadSource, srcFileInfo, loomConfig)
+			if err != nil {
+				return nil, err // Propagate error from file processing
+			}
+			if fileName != "" { // If fileName is not empty, it means the file was copied
+				filesByDir[relDir] = append(filesByDir[relDir], fileName)
+			}
+		}
+	}
+	return filesByDir, nil
+}
+
+// promptUserForOverwrite prompts the user with a message and expects a yes/no/skip response.
+func promptUserForOverwrite(message string) (string, error) {
+	reader := bufio.NewReader(os.Stdin)
+	for {
+		fmt.Printf("%s [Y]es/[N]o/[S]kip [Yes]: ", message)
+		input, err := reader.ReadString('\n')
+		if err != nil {
+			return "", err
+		}
+		input = strings.ToLower(strings.TrimSpace(input))
+		switch input {
+		case "", "yes", "y":
+			return "yes", nil
+		case "no", "n":
+			return "no", nil
+		case "skip", "s":
+			return "skip", nil
+		}
+		fmt.Println("Invalid input. Please enter 'yes', 'no', 'skip', or press Enter for 'yes'.")
+	}
+}
+
+// removeFileFromOtherThreads removes a specific file from all threads except the currentThreadName.
+// It modifies the config.Threads in place.
+func removeFileFromOtherThreads(config *project.LoomConfig, currentThreadName, dirToRemove, fileToRemove string) {
+	for i, otherThread := range config.Threads {
+		if otherThread.Name == currentThreadName {
+			continue
+		}
+		if otherThread.Files == nil {
+			continue
+		}
+
+		if filesInDir, dirExists := otherThread.Files[dirToRemove]; dirExists {
+			var updatedFilesInDir []string
+			fileWasRemoved := false
+			for _, existingFile := range filesInDir {
+				if existingFile == fileToRemove {
+					fileWasRemoved = true
+				} else {
+					updatedFilesInDir = append(updatedFilesInDir, existingFile)
+				}
+			}
+
+			if fileWasRemoved {
+				if len(updatedFilesInDir) == 0 {
+					delete(config.Threads[i].Files, dirToRemove)
+					// If the Files map itself becomes empty, nil it out for cleaner YAML
+					if len(config.Threads[i].Files) == 0 {
+						config.Threads[i].Files = nil
+					}
+				} else {
+					config.Threads[i].Files[dirToRemove] = updatedFilesInDir
+				}
+			}
+		}
+	}
+}
+
+// updateLoomConfig updates the loom.yaml configuration by removing added files from other threads
+// and then adding or updating the current thread's information.
+func updateLoomConfig(configPath string, threadName string, source string, filesByDir map[string][]string, config *project.LoomConfig) error {
+	// Remove the files being added from any other threads
+	for dir, files := range filesByDir {
+		for _, file := range files {
+			removeFileFromOtherThreads(config, threadName, dir, file)
+		}
+	}
+
+	// Ensure Threads slice is initialized
+	if config.Threads == nil {
+		config.Threads = []project.Thread{}
+	}
+
+	// Find if the thread already exists to update it, otherwise add a new one
+	foundThreadIndex := -1
+	for i, th := range config.Threads {
+		if th.Name == threadName {
+			foundThreadIndex = i
+			break
+		}
+	}
+
+	if foundThreadIndex != -1 {
+		// Update existing thread
+		config.Threads[foundThreadIndex].Source = source
+		if config.Threads[foundThreadIndex].Files == nil {
+			config.Threads[foundThreadIndex].Files = make(map[string][]string)
+		}
+		// Update the files for the specified directories in the current thread
+		for dir, files := range filesByDir {
+			config.Threads[foundThreadIndex].Files[dir] = files
+		}
+	} else {
+		// Add new thread
+		newThread := project.Thread{
+			Name:   threadName,
+			Source: source,
+			Files:  filesByDir,
+		}
+		config.Threads = append(config.Threads, newThread)
+	}
+
+	// Marshal and write the updated configuration
+	updatedData, err := yaml.Marshal(config)
+	if err != nil {
+		return err
+	}
+
+	return os.WriteFile(configPath, updatedData, os.ModePerm)
+}
+
+
+
+================================================
+File: internal/cli/config/config.go
+================================================
+// Package config implements the subcommands for the 'loom config' command.
+package config
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
+
+	"loom/internal/core/globalconfig"
+
+	"github.com/urfave/cli/v2"
+)
+
+// Command returns the cli.Command for the "config" group.
+func Command() *cli.Command {
+	return &cli.Command{
+		Name:  "config",
+		Usage: "Manage Loom's configuration for thread stores.",
+		Subcommands: []*cli.Command{
+			{
+				Name:      "add",
+				Usage:     "Add a new thread store. Usage: loom config add <path_or_url>",
+				ArgsUsage: "<path_or_url>",
+				Action:    addStoreAction,
+			},
+			{
+				Name:      "remove",
+				Usage:     "Remove a configured thread store. Usage: loom config remove <name_or_path>",
+				ArgsUsage: "<name_or_path>",
+				Action:    removeStoreAction,
+			},
+			{
+				Name:   "list",
+				Usage:  "List all configured thread stores. Usage: loom config list",
+				Action: listStoresAction,
+			},
+			// Remove subcommand will be added in Task 4.7
+		},
+	}
+}
+
+// inferStoreDetails infers the store type, name, and normalized path from the input.
+// For now, it primarily handles local paths. GitHub URL handling is a placeholder.
+func inferStoreDetails(pathOrURL string) (storeType string, storeName string, normalizedPathOrURL string, err error) {
+	// Basic check for what might be a URL (very simplistic for now)
+	if strings.HasPrefix(strings.ToLower(pathOrURL), "http:") || strings.HasPrefix(strings.ToLower(pathOrURL), "https:") || strings.Contains(strings.ToLower(pathOrURL), "github.com") {
+		// Placeholder for GitHub URL handling
+		// For now, assume it's a local path if it's not obviously a URL starting with http/https
+		// This will be expanded in Task 4.4
+		// For the purpose of this task, we will treat non-http/https prefixed paths as local.
+		// return "github", "gh-" + filepath.Base(pathOrURL), pathOrURL, nil // Simplified for now
+		return "", "", "", fmt.Errorf("github URL store type not yet fully implemented, path was: %s", pathOrURL)
+	}
+
+	// Assume local path
+	storeType = "local"
+	absPath, err := filepath.Abs(pathOrURL)
+	if err != nil {
+		return "", "", "", fmt.Errorf("failed to get absolute path for \"%s\": %w", pathOrURL, err)
+	}
+
+	fileInfo, err := os.Stat(absPath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return "", "", "", fmt.Errorf("path \"%s\" does not exist", absPath)
+		}
+		return "", "", "", fmt.Errorf("failed to stat path \"%s\": %w", absPath, err)
+	}
+	if !fileInfo.IsDir() {
+		return "", "", "", fmt.Errorf("path \"%s\" is not a directory", absPath)
+	}
+
+	storeName = filepath.Base(absPath)
+	normalizedPathOrURL = absPath
+	return
+}
+
+// addStoreAction implements the logic for "loom config add <path_or_url>".
+func addStoreAction(c *cli.Context) error {
+	if c.NArg() != 1 {
+		return fmt.Errorf("incorrect number of arguments. Expected <path_or_url>")
+	}
+
+	userInputPathOrURL := c.Args().Get(0)
+
+	storeType, inferredStoreName, normalizedPathOrURL, err := inferStoreDetails(userInputPathOrURL)
+	if err != nil {
+		// If inferStoreDetails specifically said GitHub isn't implemented, pass that through.
+		if strings.Contains(err.Error(), "github URL store type not yet fully implemented") {
+			// For now, we treat this as a "not yet supported" rather than a hard error for CLI flow.
+			// This allows local paths to work.
+			// A more robust solution would be to have inferStoreDetails return a specific error type.
+			fmt.Printf("Attempted to add a store that looks like a GitHub URL (%s). This functionality is planned but not yet implemented.\n", userInputPathOrURL)
+			fmt.Println("Please provide a local directory path for now.")
+			return nil // Or a specific error if preferred, but nil to allow local to proceed.
+		}
+		return err // Other errors from inferStoreDetails (e.g., path not found, not a dir)
+	}
+
+	// This check is now more specific after inferStoreDetails might return an error for GitHub paths.
+	// If storeType is empty, it means inferStoreDetails couldn't determine it (e.g. GitHub not implemented path taken).
+	if storeType == "" {
+		// This case should ideally be handled by the error from inferStoreDetails already.
+		// If we reach here, it implies a logic flaw or that inferStoreDetails allowed an empty type.
+		return fmt.Errorf("could not determine store type for input: %s", userInputPathOrURL)
+	}
+
+	config, err := globalconfig.LoadGlobalConfig()
+	if err != nil {
+		return fmt.Errorf("failed to load global Loom configuration: %w", err)
+	}
+
+	finalStoreName := inferredStoreName
+	nameConflictExists := false
+
+	for _, existingStore := range config.Stores {
+		// Path/URL conflict check (case-insensitive for paths, should be for URLs too)
+		// For local paths, ensure OS-specific path comparison if necessary, though Abs should normalize.
+		// For URLs, direct string comparison after normalization (e.g., lowercase, remove trailing slash)
+		if strings.EqualFold(existingStore.Path, normalizedPathOrURL) {
+			return fmt.Errorf("the path/url \"%s\" is already registered as store \"%s\" (type: %s)", normalizedPathOrURL, existingStore.Name, existingStore.Type)
+		}
+		if strings.EqualFold(existingStore.Name, inferredStoreName) {
+			nameConflictExists = true
+		}
+	}
+
+	if nameConflictExists {
+		fmt.Printf("A store named \"%s\" already exists. The path \"%s\" is unique.\n", inferredStoreName, normalizedPathOrURL)
+		fmt.Print("Please enter a new name for this store, or press Enter to cancel: ")
+		reader := bufio.NewReader(os.Stdin)
+		input, err := reader.ReadString('\n')
+		if err != nil {
+			return fmt.Errorf("failed to read user input: %w", err)
+		}
+		customName := strings.TrimSpace(input)
+		if customName == "" {
+			fmt.Println("Store addition cancelled.")
+			return nil
+		}
+		finalStoreName = customName
+
+		// Re-check if the custom name also conflicts
+		for _, existingStore := range config.Stores {
+			if strings.EqualFold(existingStore.Name, finalStoreName) {
+				return fmt.Errorf("the custom name \"%s\" also conflicts with an existing store. Please try again", finalStoreName)
+			}
+		}
+	}
+
+	newStore := globalconfig.Store{
+		Name: finalStoreName,
+		Type: storeType,
+		Path: normalizedPathOrURL, // Store the normalized path/URL
+	}
+
+	config.Stores = append(config.Stores, newStore)
+
+	if err := globalconfig.SaveGlobalConfig(config); err != nil {
+		return fmt.Errorf("failed to save global Loom configuration: %w", err)
+	}
+
+	fmt.Printf("Successfully added %s store \"%s\" with path/url \"%s\"\n", storeType, finalStoreName, normalizedPathOrURL)
+	configPath, _ := globalconfig.GetGlobalConfigPath()
+	fmt.Printf("Configuration saved to: %s\n", configPath)
+	return nil
+}
+
+// removeStoreAction implements the logic for "loom config remove <name_or_path>".
+func removeStoreAction(c *cli.Context) error {
+	if c.NArg() != 1 {
+		return fmt.Errorf("incorrect number of arguments. Expected <name_or_path>")
+	}
+
+	nameOrPathToRemove := c.Args().Get(0)
+
+	config, err := globalconfig.LoadGlobalConfig()
+	if err != nil {
+		return fmt.Errorf("failed to load global Loom configuration: %w", err)
+	}
+
+	found := false
+	var updatedStores []globalconfig.Store
+	removedStoreDetails := ""
+
+	// Attempt to match by name first (case-insensitive)
+	for _, store := range config.Stores {
+		if strings.EqualFold(store.Name, nameOrPathToRemove) {
+			found = true
+			removedStoreDetails = fmt.Sprintf("store \"%s\" (type: %s, path/url: %s)", store.Name, store.Type, store.Path)
+			// Skip adding this store to updatedStores
+			continue
+		}
+		updatedStores = append(updatedStores, store)
+	}
+
+	// If not found by name, attempt to match by path/URL
+	if !found {
+		updatedStores = nil // Reset for path matching pass
+		normalizedInputPath := nameOrPathToRemove
+		// Attempt to normalize if it looks like a local path (not a URL)
+		if !strings.HasPrefix(strings.ToLower(normalizedInputPath), "http:") && !strings.HasPrefix(strings.ToLower(normalizedInputPath), "https:") && !strings.Contains(strings.ToLower(normalizedInputPath), "github.com") {
+			absPath, err := filepath.Abs(nameOrPathToRemove)
+			if err == nil { // If Abs path resolution is successful
+				normalizedInputPath = absPath
+			}
+			// If Abs fails, we proceed with the original input for comparison, it might be a non-existent path or a URL fragment that Abs can't handle.
+		}
+
+		for _, store := range config.Stores {
+			// Compare normalized input with stored path (which is already normalized for local stores)
+			if strings.EqualFold(store.Path, normalizedInputPath) {
+				found = true
+				removedStoreDetails = fmt.Sprintf("store \"%s\" (type: %s, path/url: %s)", store.Name, store.Type, store.Path)
+				// Skip adding this store to updatedStores
+				continue
+			}
+			updatedStores = append(updatedStores, store)
+		}
+	}
+
+	if !found {
+		return fmt.Errorf("store with name or path/url \"%s\" not found", nameOrPathToRemove)
+	}
+
+	config.Stores = updatedStores
+
+	if err := globalconfig.SaveGlobalConfig(config); err != nil {
+		return fmt.Errorf("failed to save global Loom configuration: %w", err)
+	}
+
+	fmt.Printf("Successfully removed %s\n", removedStoreDetails)
+	configPath, _ := globalconfig.GetGlobalConfigPath()
+	fmt.Printf("Configuration saved to: %s\n", configPath)
+	return nil
+}
+
+// listStoresAction implements the logic for "loom config list".
+func listStoresAction(c *cli.Context) error {
+	config, err := globalconfig.LoadGlobalConfig()
+	if err != nil {
+		return fmt.Errorf("failed to load global Loom configuration: %w", err)
+	}
+
+	hasPrintedStore := false
+	if len(config.Stores) > 0 {
+		fmt.Println("Configured Thread Stores:")
+		for i, store := range config.Stores {
+			fmt.Printf("  Name:     %s\n", store.Name)
+			fmt.Printf("  Type:     %s\n", store.Type)
+			fmt.Printf("  Path/URL: %s\n", store.Path)
+			if i < len(config.Stores)-1 {
+				fmt.Println() // Add a blank line between store entries
+			}
+			hasPrintedStore = true
+		}
+	}
+
+	// Check for project-specific store
+	currentDir, err := os.Getwd()
+	if err != nil {
+		// If we can't get the current directory, we can't check for a project store.
+		// This is unlikely, but we should handle it gracefully.
+		// We might not want to error out the whole command for this.
+		fmt.Fprintf(os.Stderr, "Warning: Could not determine current directory to check for project store: %v\n", err)
+	} else {
+		projectStorePath := filepath.Join(currentDir, ".loom")
+		if _, err := os.Stat(projectStorePath); err == nil {
+			if hasPrintedStore {
+				fmt.Println() // Add a blank line if global stores were printed
+			}
+			fmt.Println("Project Store:")
+			fmt.Printf("  Name:     (Project)\n") // Project store doesn't have a configurable name
+			fmt.Printf("  Type:     project\n")
+			fmt.Printf("  Path/URL: %s\n", projectStorePath)
+			hasPrintedStore = true
+		}
+	}
+
+	if !hasPrintedStore {
+		fmt.Println("No configured global stores or project-specific store found.")
+	}
+
+	return nil
+}
+
+
+
+================================================
+File: internal/cli/init/init.go
+================================================
+// Package init provides the CLI command for initializing a new loom project
+package init
+
+import (
+	"fmt"
+
+	"github.com/urfave/cli/v2"
+	"loom/internal/core/project"
+)
+
+// Command returns the init command for the CLI
+func Command() *cli.Command {
+	return &cli.Command{
+		Name:  "init",
+		Usage: "Initialize a new loom.yaml file in the current directory",
+		Action: func(c *cli.Context) error {
+			return handleInit(c)
+		},
+	}
+}
+
+// handleInit handles the init command
+func handleInit(c *cli.Context) error {
+	// Initialize the project
+	err := project.InitProject()
+	if err != nil {
+		return fmt.Errorf("failed to initialize project: %w", err)
+	}
+
+	fmt.Println("Initialized empty Loom project with loom.yaml")
+	return nil
+}
+
+
+
+================================================
+File: internal/cli/list/list.go
+================================================
+// Title: List Command Implementation
+// Purpose: Implements the `loom list` command to display active threads in the project.
+
+package cli
+
+import (
+	"fmt"
+	"os"
+	"path/filepath" // Added for store path operations
+	"strings"       // Added for string operations
+
+	"loom/internal/core/globalconfig" // Added for global config access
+	"loom/internal/core/project"      // Import the project package
+
+	"gopkg.in/yaml.v3"
+)
+
+// Remove local Thread and LoomConfig structs, use project package versions
+
+// listThreads reads the loom.yaml file and lists active threads.
+// It also lists available threads from configured local stores.
+func listThreads() error {
+	if err := printActiveProjectThreads(); err != nil {
+		return err
+	}
+
+	fmt.Println("\nAvailable store threads:")
+	gConf, err := globalconfig.LoadGlobalConfig() // This loads the actual global config struct
+	if err != nil {
+		return fmt.Errorf("failed to load global Loom configuration: %w", err)
+	}
+
+	foundAnyStoreThreads := false
+	if len(gConf.Stores) == 0 { // gConf is already a pointer, so no need to check gConf == nil separately if LoadGlobalConfig guarantees non-nil on no error
+		fmt.Println("No global thread stores configured. Use 'loom config add local <path_to_store> [name]' to add one.")
+	} else {
+		// Pass the loaded gConf directly to printGlobalStoreThreads
+		foundGlobalStoreThreads, errPrintingGlobalStores := printGlobalStoreThreads(gConf)
+		if errPrintingGlobalStores != nil {
+			fmt.Fprintf(os.Stderr, "Error processing global stores: %v\n", errPrintingGlobalStores)
+		}
+		foundAnyStoreThreads = foundAnyStoreThreads || foundGlobalStoreThreads
+	}
+
+	foundProjectStoreThreads, errPrintingProjectStore := printProjectStoreThreads()
+	if errPrintingProjectStore != nil {
+		fmt.Fprintf(os.Stderr, "Error processing project store: %v\n", errPrintingProjectStore)
+	}
+	foundAnyStoreThreads = foundAnyStoreThreads || foundProjectStoreThreads
+
+	// Simplified conditional logic for final messages
+	if !foundAnyStoreThreads {
+		if len(gConf.Stores) == 0 { // No global stores configured and no project store threads found
+			// Message about no global stores already printed. Potentially add a note if project store was also empty/missing.
+			// Or rely on printProjectStoreThreads to have printed its specific message.
+		} else { // Global stores are configured, but no threads were found in them or in the project store.
+			hasLocalStore := false
+			for _, store := range gConf.Stores {
+				if store.Type == "local" {
+					hasLocalStore = true
+					break
+				}
+			}
+			if hasLocalStore {
+				fmt.Println("No threads found in any configured local stores or the project store, or stores were inaccessible.")
+			} else {
+				fmt.Println("No 'local' type global thread stores configured. Other store types are not yet supported for listing.")
+			}
+		}
+	}
+
+	return nil
+}
+
+// printGlobalStoreThreads iterates over configured global stores and prints their threads.
+// It returns true if any threads were found in global stores, false otherwise.
+// The gConf parameter should be the struct type defined in the globalconfig package.
+func printGlobalStoreThreads(gConf *globalconfig.GlobalLoomConfig) (bool, error) { // Corrected type to globalconfig.GlobalLoomConfig
+	foundAny := false
+	for _, store := range gConf.Stores {
+		if store.Type == "local" { // For now, only supporting local stores
+			fmt.Printf("\nStore: %s (Type: %s, Path: %s)\n", store.Name, store.Type, store.Path)
+			threads, err := listThreadsInStore(store.Path)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "  Error listing threads in store '%s': %v\n", store.Name, err)
+				continue // Continue to the next store
+			}
+			if len(threads) == 0 {
+				fmt.Println("  No threads found in this store.")
+			} else {
+				foundAny = true
+				for _, threadName := range threads {
+					fmt.Printf("  - %s\n", threadName)
+				}
+			}
+		}
+	}
+	return foundAny, nil
+}
+
+// printProjectStoreThreads lists threads from the project-specific .loom store.
+// It returns true if any threads were found in the project store, false otherwise.
+func printProjectStoreThreads() (bool, error) {
+	projectRoot, err := os.Getwd()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Warning: Could not determine current directory to check for project store: %v\n", err)
+		return false, nil // Not a fatal error for listing, just can't check project store
+	}
+
+	projectStorePath := filepath.Join(projectRoot, ".loom")
+	if _, statErr := os.Stat(projectStorePath); statErr == nil {
+		fmt.Printf("\nProject Store (.loom):\n")
+		threads, listErr := listThreadsInStore(projectStorePath)
+		if listErr != nil {
+			fmt.Fprintf(os.Stderr, "  Error listing threads in project store: %v\n", listErr)
+			return false, nil // Error occurred, but treat as no threads found for the purpose of the caller
+		}
+		if len(threads) == 0 {
+			fmt.Println("  No threads found in this store.")
+			return false, nil
+		}
+		for _, threadName := range threads {
+			fmt.Printf("  - %s\n", threadName)
+		}
+		return true, nil // Threads found
+	} else if !os.IsNotExist(statErr) {
+		// Report error if .loom exists but cannot be stated, unless it's simply not found
+		fmt.Fprintf(os.Stderr, "Warning: Could not stat project store at '%s': %v\n", projectStorePath, statErr)
+	}
+	return false, nil // Project store does not exist or error stating it
+}
+
+// printActiveProjectThreads handles reading loom.yaml and printing active project threads.
+func printActiveProjectThreads() error {
+	file, err := os.Open(project.YamlFileName) // Use project.YamlFileName
+	if err != nil {
+		// If loom.yaml doesn't exist, it's not an error for listing, just means no project threads
+		if !os.IsNotExist(err) {
+			return fmt.Errorf("failed to open %s: %w", project.YamlFileName, err)
+		}
+		fmt.Println("No active project configuration (loom.yaml) found.")
+		return nil // Not an error in this context
+	}
+	defer func() {
+		if err := file.Close(); err != nil {
+			fmt.Fprintf(os.Stderr, "Error closing file %s: %v\n", project.YamlFileName, err)
+		}
+	}()
+
+	var projectConfig project.LoomConfig // Use project.LoomConfig
+	decoder := yaml.NewDecoder(file)
+	if err := decoder.Decode(&projectConfig); err != nil {
+		return fmt.Errorf("failed to parse %s: %w", project.YamlFileName, err)
+	}
+
+	gConfForActive, _ := globalconfig.LoadGlobalConfig() // Load global config to check store names
+
+	if len(projectConfig.Threads) == 0 {
+		fmt.Println("No threads are currently active in the project.")
+	} else {
+		fmt.Println("Active project threads:")
+		for _, thread := range projectConfig.Threads { // Iterate over Thread structs
+			displaySource := thread.Source
+			// Check if the source matches a known local store and format accordingly
+			if gConfForActive != nil {
+				for _, store := range gConfForActive.Stores {
+					if store.Type == "local" && strings.HasPrefix(thread.Source, store.Name) {
+						// Ensure it's not a project store source that happens to start with a store name
+						if !strings.HasPrefix(thread.Source, "project:") {
+							displaySource = fmt.Sprintf("local:%s", thread.Source)
+							break
+						}
+					}
+				}
+			}
+			fmt.Printf("- %s (Source: %s)\n", thread.Name, displaySource) // Print thread name and source
+		}
+	}
+	return nil
+}
+
+// listThreadsInStore lists subdirectories in a given store path that appear to be valid Loom threads.
+// A directory is considered a thread if it contains a 'config.yml' file or a '_thread/' subdirectory.
+func listThreadsInStore(storePath string) ([]string, error) {
+	entries, err := os.ReadDir(storePath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read store directory '%s': %w", storePath, err)
+	}
+
+	var threadNames []string
+	for _, entry := range entries {
+		if entry.IsDir() {
+			threadName := entry.Name()
+			// Check for config.yml or _thread/ directory to qualify as a thread
+			configFilePath := filepath.Join(storePath, threadName, "config.yml")
+			threadDirPath := filepath.Join(storePath, threadName, "_thread")
+
+			_, errConfig := os.Stat(configFilePath)
+			_, errDir := os.Stat(threadDirPath)
+
+			if errConfig == nil || errDir == nil { // If either exists, it's a thread
+				threadNames = append(threadNames, threadName)
+			}
+		}
+	}
+	return threadNames, nil
+}
+
+// ExecuteListCommand is the entry point for the `loom list` command.
+func ExecuteListCommand() {
+	if err := listThreads(); err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %s\n", err)
+		os.Exit(1)
+	}
+}
+
+
+
+================================================
+File: internal/cli/remove/remove.go
+================================================
+// filepath: c:\Users\solivand\git\loom\internal\cli\remove\remove.go
+// Title: Remove Command Implementation
+// Purpose: Implements the `loom remove <thread_name>` command to remove a thread and its files from the project.
+
+package remove
+
+import (
+	"fmt"
+	"os"
+	"path/filepath"
+
+	"loom/internal/core/project" // Import the project package
+
+	"github.com/urfave/cli/v2"
+	"gopkg.in/yaml.v3"
+)
+
+// Remove local LoomConfig and Thread structs, use project package versions
+
+// Command returns the cli.Command for the "remove" command.
+func Command() *cli.Command {
+	return &cli.Command{
+		Name:      "remove",
+		Usage:     "Remove a thread from the project",
+		ArgsUsage: "<thread_name>",
+		Action: func(c *cli.Context) error {
+			threadName := c.Args().First()
+			if threadName == "" {
+				return fmt.Errorf("thread name is required")
+			}
+			if threadName == "*" {
+				return removeAllThreadsAction()
+			}
+			return removeThreadAction(threadName)
+		},
+	}
+}
+
+// readLoomConfig reads and parses the loom.yaml file from the project root.
+func readLoomConfig(projectRoot string) (*project.LoomConfig, error) {
+	loomConfigPath := filepath.Join(projectRoot, project.YamlFileName)
+	data, err := os.ReadFile(loomConfigPath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read %s: %w", project.YamlFileName, err)
+	}
+
+	var config project.LoomConfig
+	err = yaml.Unmarshal(data, &config)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse %s: %w", project.YamlFileName, err)
+	}
+	return &config, nil
+}
+
+// findThreadInConfig searches for a thread by name in the LoomConfig.
+// It returns the thread and a new slice of threads with the found thread removed.
+// If the thread is not found, it returns an error.
+func findThreadInConfig(config *project.LoomConfig, threadName string) (project.Thread, []project.Thread, error) {
+	var threadToRemove project.Thread
+	var updatedThreads []project.Thread
+	threadFound := false
+
+	for _, thread := range config.Threads {
+		if thread.Name == threadName {
+			threadFound = true
+			threadToRemove = thread
+		} else {
+			updatedThreads = append(updatedThreads, thread)
+		}
+	}
+
+	if !threadFound {
+		return project.Thread{}, nil, fmt.Errorf("thread '%s' not found in %s", threadName, project.YamlFileName)
+	}
+	return threadToRemove, updatedThreads, nil
+}
+
+// removeThreadFiles removes files associated with a given thread and attempts to clean up empty directories.
+func removeThreadFiles(thread project.Thread, projectRoot string, threadName string) {
+	if thread.Files == nil {
+		return
+	}
+	for dir, files := range thread.Files {
+		for _, file := range files {
+			filePath := filepath.Join(projectRoot, dir, file)
+			err := os.Remove(filePath)
+			if err != nil {
+				if os.IsNotExist(err) {
+					fmt.Printf("Warning: File %s listed in %s for thread '%s' not found, skipping.\n", filePath, project.YamlFileName, threadName)
+				} else {
+					fmt.Printf("Warning: Failed to remove file %s: %v\n", filePath, err)
+				}
+			} else {
+				fmt.Printf("Removed file: %s\n", filePath)
+			}
+		}
+		// Attempt to remove the directory if it's empty
+		dirPath := filepath.Join(projectRoot, dir)
+		if dirPath != projectRoot { // Don't try to remove the project root
+			entries, readDirErr := os.ReadDir(dirPath)
+			if readDirErr == nil && len(entries) == 0 {
+				err := os.Remove(dirPath)
+				if err != nil {
+					// Ignore error if directory is not empty or other issues
+					// fmt.Printf("Warning: Failed to remove directory %s: %v\n", dirPath, err)
+				} else {
+					fmt.Printf("Removed empty directory: %s\n", dirPath)
+				}
+			}
+		}
+	}
+}
+
+// updateLoomConfig marshals the updated configuration and writes it back to loom.yaml.
+func updateLoomConfig(projectRoot string, config *project.LoomConfig) error {
+	loomConfigPath := filepath.Join(projectRoot, project.YamlFileName)
+	updatedData, err := yaml.Marshal(config)
+	if err != nil {
+		return fmt.Errorf("failed to marshal %s: %w", project.YamlFileName, err)
+	}
+
+	err = os.WriteFile(loomConfigPath, updatedData, 0644)
+	if err != nil {
+		return fmt.Errorf("failed to write updated %s: %w", project.YamlFileName, err)
+	}
+	return nil
+}
+
+// removeThreadAction handles the logic for removing a thread.
+func removeThreadAction(threadName string) error {
+	projectRoot, err := os.Getwd() // Assuming loom commands run from project root
+	if err != nil {
+		return fmt.Errorf("failed to get current directory: %w", err)
+	}
+
+	config, err := readLoomConfig(projectRoot)
+	if err != nil {
+		return err // Error already contains context
+	}
+
+	threadToRemove, updatedThreads, err := findThreadInConfig(config, threadName)
+	if err != nil {
+		return err // Error already contains context
+	}
+
+	removeThreadFiles(threadToRemove, projectRoot, threadName)
+
+	config.Threads = updatedThreads
+	if err := updateLoomConfig(projectRoot, config); err != nil {
+		return err // Error already contains context
+	}
+
+	fmt.Printf("Thread '%s' removed successfully.\n", threadName)
+	return nil
+}
+
+// removeThreadFilesAndCollectDirs processes a single thread's files for removal
+// and collects directories that might become empty.
+func removeThreadFilesAndCollectDirs(thread project.Thread, projectRoot string, directoriesToRemove map[string]bool) {
+	fmt.Printf("Processing thread: %s\n", thread.Name)
+	if thread.Files != nil {
+		for dir, files := range thread.Files {
+			actualDir := filepath.Join(projectRoot, dir)
+			directoriesToRemove[actualDir] = true // Mark directory for potential removal
+			for _, file := range files {
+				filePath := filepath.Join(actualDir, file)
+				err := os.Remove(filePath)
+				if err != nil {
+					if os.IsNotExist(err) {
+						fmt.Printf("Warning: File %s listed for thread '%s' not found, skipping.\n", filePath, thread.Name)
+					} else {
+						fmt.Printf("Warning: Failed to remove file %s: %v\n", filePath, err)
+					}
+				} else {
+					fmt.Printf("Removed file: %s\n", filePath)
+				}
+			}
+		}
+	}
+}
+
+// removeEmptyDirectories attempts to remove directories that are now empty.
+func removeEmptyDirectories(projectRoot string, directoriesToRemove map[string]bool) {
+	for dirPath := range directoriesToRemove {
+		if dirPath != projectRoot { // Don't try to remove the project root
+			entries, readDirErr := os.ReadDir(dirPath)
+			if readDirErr == nil && len(entries) == 0 {
+				err := os.Remove(dirPath)
+				if err != nil {
+					// fmt.Printf("Warning: Failed to remove directory %s: %v\n", dirPath, err)
+				} else {
+					fmt.Printf("Removed empty directory: %s\n", dirPath)
+				}
+			}
+		}
+	}
+}
+
+// removeAllThreadsAction handles the logic for removing all threads.
+func removeAllThreadsAction() error {
+	projectRoot, err := os.Getwd()
+	if err != nil {
+		return fmt.Errorf("failed to get current directory: %w", err)
+	}
+	loomConfigPath := filepath.Join(projectRoot, project.YamlFileName)
+
+	data, err := os.ReadFile(loomConfigPath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			fmt.Printf("%s not found. No threads to remove.\n", project.YamlFileName)
+			return nil
+		}
+		return fmt.Errorf("failed to read %s: %w", project.YamlFileName, err)
+	}
+
+	var config project.LoomConfig
+	err = yaml.Unmarshal(data, &config)
+	if err != nil {
+		return fmt.Errorf("failed to parse %s: %w", project.YamlFileName, err)
+	}
+
+	if len(config.Threads) == 0 {
+		fmt.Println("No threads found in loom.yaml to remove.")
+		return nil
+	}
+
+	fmt.Println("Removing all threads and their files...")
+
+	directoriesToRemove := make(map[string]bool)
+
+	for _, thread := range config.Threads {
+		removeThreadFilesAndCollectDirs(thread, projectRoot, directoriesToRemove)
+	}
+
+	removeEmptyDirectories(projectRoot, directoriesToRemove)
+
+	// Clear threads from config
+	config.Threads = []project.Thread{}
+	updatedData, err := yaml.Marshal(&config)
+	if err != nil {
+		return fmt.Errorf("failed to marshal %s: %w", project.YamlFileName, err)
+	}
+
+	err = os.WriteFile(loomConfigPath, updatedData, 0644)
+	if err != nil {
+		return fmt.Errorf("failed to write updated %s: %w", project.YamlFileName, err)
+	}
+
+	fmt.Printf("All threads removed and %s cleared successfully.\n", project.YamlFileName)
+	return nil
+}
+
+
+
+================================================
+File: internal/cli/weave/weave.go
+================================================
+package cli
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
+
+	"loom/internal/core/project" // Import the project package
+
+	"gopkg.in/yaml.v3"
+)
+
+// normalizeDir ensures directory paths are consistent for loom.yaml keys.
+// Returns "./" for empty or "." paths, otherwise ensures forward slashes and a trailing slash.
+func normalizeDir(dirPath string) string {
+	if dirPath == "" || dirPath == "." {
+		return "./"
+	}
+	slashed := filepath.ToSlash(dirPath)
+	if !strings.HasSuffix(slashed, "/") {
+		return slashed + "/"
+	}
+	return slashed
+}
+
+// promptUserForOverwriteInWeave prompts the user with a message and expects a yes/no/skip response.
+// Duplicated from add.go for now, consider refactoring to a shared utility if more widely needed.
+func promptUserForOverwriteInWeave(message string) (string, error) {
+	reader := bufio.NewReader(os.Stdin)
+	for {
+		fmt.Printf("%s [Y]es/[N]o/[S]kip [Yes]: ", message)
+		input, err := reader.ReadString('\n')
+		if err != nil {
+			return "", err
+		}
+		input = strings.ToLower(strings.TrimSpace(input))
+		// Corrected condition to handle Enter key (empty input) as "yes"
+		switch input {
+		case "", "yes", "y":
+			return "yes", nil
+		case "no", "n":
+			return "no", nil
+		case "skip", "s":
+			return "skip", nil
+		}
+		// Corrected error message
+		fmt.Println("Invalid input. Please enter 'yes', 'no', 'skip', or press Enter for 'yes'.")
+	}
+}
+
+// Weave re-applies threads to the project.
+// If threadNameToWeave is empty, all threads are woven.
+// Otherwise, only the specified thread is woven.
+func Weave(threadNameToWeave string) error {
+	projectRoot, err := os.Getwd()
+	if err != nil {
+		return fmt.Errorf("failed to get current directory: %w", err)
+	}
+
+	loomConfig, loomConfigPath, err := loadProjectLoomConfig(projectRoot)
+	if err != nil {
+		return err // Error already contains context
+	}
+
+	foundSpecificThread := false
+	for i := range loomConfig.Threads {
+		currentThread := &loomConfig.Threads[i] // Use pointer to allow modification by helpers
+
+		// If a specific thread is requested, and this isn't it, we might skip.
+		// However, processWeavingForThread handles its own skipping logic based on threadNameToWeave.
+		// We set foundSpecificThread if the target thread is encountered.
+		if threadNameToWeave != "" && currentThread.Name == threadNameToWeave {
+			foundSpecificThread = true
+		}
+
+		err := processWeavingForThread(currentThread, loomConfig, projectRoot, threadNameToWeave)
+		if err != nil {
+			// An error from processWeavingForThread is considered significant enough to stop.
+			// It would typically be a file system error or critical prompt failure.
+			// Minor issues like a single file not found in source are handled within processWeavingForThread by logging.
+			return fmt.Errorf("error weaving thread '%s': %w", currentThread.Name, err)
+		}
+
+		// If we were weaving a specific thread and we just processed it, we can break the loop.
+		if threadNameToWeave != "" && currentThread.Name == threadNameToWeave {
+			break
+		}
+	}
+
+	if threadNameToWeave != "" && !foundSpecificThread {
+		return fmt.Errorf("thread '%s' not found in %s", threadNameToWeave, project.YamlFileName)
+	}
+
+	if err := saveProjectLoomConfig(loomConfigPath, loomConfig); err != nil {
+		return err // Error already contains context
+	}
+
+	fmt.Println("Weave operation completed.")
+	return nil
+}
+
+// loadProjectLoomConfig reads and parses the loom.yaml file from the project root.
+func loadProjectLoomConfig(projectRoot string) (*project.LoomConfig, string, error) {
+	loomConfigPath := filepath.Join(projectRoot, project.YamlFileName)
+	configData, err := os.ReadFile(loomConfigPath)
+	if err != nil {
+		return nil, "", fmt.Errorf("failed to read %s: %w", loomConfigPath, err)
+	}
+
+	var loomConfig project.LoomConfig
+	if err := yaml.Unmarshal(configData, &loomConfig); err != nil {
+		// Ensure Files map is initialized for all threads if it's nil
+		// This is good practice though yaml unmarshal of an empty map should be fine.
+		for i := range loomConfig.Threads {
+			if loomConfig.Threads[i].Files == nil {
+				loomConfig.Threads[i].Files = make(map[string][]string)
+			}
+		}
+		return nil, "", fmt.Errorf("failed to parse %s: %w", loomConfigPath, err)
+	}
+	// Ensure Files map is initialized post-unmarshal
+	for i := range loomConfig.Threads {
+		if loomConfig.Threads[i].Files == nil {
+			loomConfig.Threads[i].Files = make(map[string][]string)
+		}
+	}
+	return &loomConfig, loomConfigPath, nil
+}
+
+// saveProjectLoomConfig marshals and writes the loomConfig back to the loom.yaml file.
+func saveProjectLoomConfig(loomConfigPath string, loomConfig *project.LoomConfig) error {
+	// Ensure all threads have non-nil Files maps before saving
+	for i := range loomConfig.Threads {
+		if loomConfig.Threads[i].Files == nil {
+			loomConfig.Threads[i].Files = make(map[string][]string)
+		}
+	}
+	updatedData, err := yaml.Marshal(loomConfig)
+	if err != nil {
+		return fmt.Errorf("failed to marshal updated %s: %w", project.YamlFileName, err)
+	}
+	err = os.WriteFile(loomConfigPath, updatedData, 0644)
+	if err != nil {
+		return fmt.Errorf("failed to write updated %s: %w", project.YamlFileName, err)
+	}
+	return nil
+}
+
+// removeFileFromThreadManifest removes a file from the specified thread's manifest in the loomConfig.
+func removeFileFromThreadManifest(loomConfig *project.LoomConfig, ownerThreadName string, fileRelToProject string) {
+	dir, file := filepath.Split(fileRelToProject)
+	normalizedDir := normalizeDir(dir)
+
+	for i := range loomConfig.Threads {
+		if loomConfig.Threads[i].Name == ownerThreadName {
+			if loomConfig.Threads[i].Files == nil { // Should not happen if initialized properly
+				loomConfig.Threads[i].Files = make(map[string][]string)
+				return // Nothing to remove
+			}
+			if filesInDir, ok := loomConfig.Threads[i].Files[normalizedDir]; ok {
+				var updatedFilesInDir []string
+				for _, f := range filesInDir {
+					if f != file {
+						updatedFilesInDir = append(updatedFilesInDir, f)
+					}
+				}
+				if len(updatedFilesInDir) > 0 {
+					loomConfig.Threads[i].Files[normalizedDir] = updatedFilesInDir
+				} else {
+					delete(loomConfig.Threads[i].Files, normalizedDir)
+					if len(loomConfig.Threads[i].Files) == 0 {
+						// Ensure it's an empty map, not nil, for consistency, though delete doesn't make map nil.
+						loomConfig.Threads[i].Files = make(map[string][]string)
+					}
+				}
+			}
+			return // Found the thread and processed
+		}
+	}
+}
+
+// processFileWeavingParams holds parameters for handleFileWeavingOperation.
+type processFileWeavingParams struct {
+	projectRoot       string
+	threadSourcePath  string // Full path to the _thread directory
+	relPathFromSource string // Relative path of the file from _thread dir (e.g., "src/button.js" or "main.go")
+	currentThreadName string
+	threadNameToWeave string              // Specific thread to weave, or "" for all
+	loomConfig        *project.LoomConfig // Pointer to the main config for modifications
+}
+
+// fileWeavingAction holds the results of the decision logic for a file operation.
+type fileWeavingAction struct {
+	shouldWrite bool
+}
+
+// handleFileConflictOwnedByOther handles logic when a file exists and is owned by another thread.
+// It modifies loomConfig if ownership is taken.
+// Returns true if the file should be written by the current thread.
+func handleFileConflictOwnedByOther(params *processFileWeavingParams, ownerThreadName string, relDestPathForDisplay string) (bool, error) {
+	switch params.threadNameToWeave {
+	case "": // Weaving all threads, standard conflict prompt
+		fmt.Printf("File '%s' is currently owned by thread '%s'.\n", relDestPathForDisplay, ownerThreadName)
+		choice, promptErr := promptUserForOverwriteInWeave(fmt.Sprintf("Thread '%s' wants to overwrite it. Take ownership? ", params.currentThreadName))
+		if promptErr != nil {
+			return false, fmt.Errorf("failed to get user input for '%s': %w", relDestPathForDisplay, promptErr)
+		}
+		if choice == "yes" {
+			fmt.Printf("Thread '%s' is taking ownership of '%s'.\n", params.currentThreadName, relDestPathForDisplay)
+			removeFileFromThreadManifest(params.loomConfig, ownerThreadName, relDestPathForDisplay)
+			return true, nil
+		}
+		fmt.Printf("Skipping file '%s'. Thread '%s' retains ownership.\n", relDestPathForDisplay, ownerThreadName)
+		return false, nil
+	case params.currentThreadName: // Weaving specific thread, and it's this one, taking from another.
+		fmt.Printf("File '%s' is currently owned by thread '%s'.\n", relDestPathForDisplay, ownerThreadName)
+		fmt.Printf("Thread '%s' (being specifically woven) is taking ownership of '%s'.\n", params.currentThreadName, relDestPathForDisplay)
+		removeFileFromThreadManifest(params.loomConfig, ownerThreadName, relDestPathForDisplay)
+		return true, nil
+	default: // Weaving specific thread, but this file is owned by another (and not the one being woven). Skip.
+		fmt.Printf("Skipping file '%s'. It is owned by '%s', and we are weaving '%s' (not '%s').\n", relDestPathForDisplay, ownerThreadName, params.threadNameToWeave, params.currentThreadName)
+		return false, nil
+	}
+}
+
+// handleFileConflictUnowned handles logic when a file exists but is not owned by any Loom thread.
+// Returns true if the file should be written by the current thread.
+func handleFileConflictUnowned(params *processFileWeavingParams, relDestPathForDisplay string) (bool, error) {
+	switch params.threadNameToWeave {
+	case "": // Weaving all, prompt
+		fmt.Printf("File '%s' exists but is not currently owned by any Loom thread.\n", relDestPathForDisplay)
+		choice, promptErr := promptUserForOverwriteInWeave(fmt.Sprintf("Thread '%s' wants to overwrite it. Take ownership? ", params.currentThreadName))
+		if promptErr != nil {
+			return false, fmt.Errorf("failed to get user input for '%s': %w", relDestPathForDisplay, promptErr)
+		}
+		if choice == "yes" {
+			fmt.Printf("Thread '%s' is taking ownership of '%s'.\n", params.currentThreadName, relDestPathForDisplay)
+			return true, nil
+		}
+		fmt.Printf("Skipping file '%s'. It remains an unmanaged file.\n", relDestPathForDisplay)
+		return false, nil
+	case params.currentThreadName: // Weaving specific thread (this one), file is unowned. Take ownership.
+		fmt.Printf("File '%s' exists but is not owned. Thread '%s' (being specifically woven) is taking ownership.\n", relDestPathForDisplay, params.currentThreadName)
+		return true, nil
+	default: // Weaving specific thread (not this one), file is unowned. Skip.
+		fmt.Printf("Skipping unowned file '%s'. We are weaving '%s', not '%s'.\n", relDestPathForDisplay, params.threadNameToWeave, params.currentThreadName)
+		return false, nil
+	}
+}
+
+// decideFileWeavingAction determines if a file should be written and handles ownership changes.
+func decideFileWeavingAction(params *processFileWeavingParams, destPathInProject string, relDestPathForDisplay string) (fileWeavingAction, error) {
+	action := fileWeavingAction{shouldWrite: true} // Default to write, can be overridden
+
+	_, statErr := os.Stat(destPathInProject)
+	fileExists := statErr == nil
+	if statErr != nil && !os.IsNotExist(statErr) {
+		return fileWeavingAction{}, fmt.Errorf("error checking destination file %s: %w", destPathInProject, statErr)
+	}
+
+	if fileExists {
+		ownerThreadName, isOwned := params.loomConfig.IsFileOwned(destPathInProject, params.projectRoot)
+
+		if isOwned && ownerThreadName != params.currentThreadName {
+			// Owned by another thread
+			var err error
+			action.shouldWrite, err = handleFileConflictOwnedByOther(params, ownerThreadName, relDestPathForDisplay)
+			if err != nil {
+				return fileWeavingAction{}, err
+			}
+		} else if !isOwned {
+			// File exists but not owned by any Loom thread
+			var err error
+			action.shouldWrite, err = handleFileConflictUnowned(params, relDestPathForDisplay)
+			if err != nil {
+				return fileWeavingAction{}, err
+			}
+		} else if isOwned && ownerThreadName == params.currentThreadName {
+			// File is owned by the current thread. Re-apply.
+			fmt.Printf("Re-applying file '%s' from thread '%s'.\n", relDestPathForDisplay, params.currentThreadName)
+			action.shouldWrite = true
+		}
+	} else { // File does not exist at destination.
+		if err := os.MkdirAll(filepath.Dir(destPathInProject), os.ModePerm); err != nil {
+			return fileWeavingAction{}, fmt.Errorf("failed to create directory for %s: %w", destPathInProject, err)
+		}
+		fmt.Printf("Creating new file '%s' from thread '%s'.\n", relDestPathForDisplay, params.currentThreadName)
+		action.shouldWrite = true
+	}
+	return action, nil
+}
+
+// handleFileWeavingOperation processes a single file for the weave operation.
+// Returns true if the file was written, false otherwise, and an error if one occurred.
+func handleFileWeavingOperation(params *processFileWeavingParams) (bool, error) {
+	pathInThreadSource := filepath.Join(params.threadSourcePath, params.relPathFromSource)
+	destPathInProject := filepath.Join(params.projectRoot, params.relPathFromSource)
+
+	sourceInfo, statSourceErr := os.Stat(pathInThreadSource)
+	if os.IsNotExist(statSourceErr) {
+		fmt.Printf("Warning: Source file %s for thread '%s' not found. Skipping this file.\n", pathInThreadSource, params.currentThreadName)
+		return false, nil
+	} else if statSourceErr != nil {
+		fmt.Printf("Error stating source file %s for thread '%s': %v. Skipping this file.\n", pathInThreadSource, params.currentThreadName, statSourceErr)
+		return false, nil // Logged, not a fatal error for the whole weave
+	}
+
+	if sourceInfo.IsDir() {
+		fmt.Printf("Warning: Source path %s is a directory, expected a file. Skipping.\n", pathInThreadSource)
+		return false, nil
+	}
+
+	relDestPathForDisplay, _ := filepath.Rel(params.projectRoot, destPathInProject)
+	relDestPathForDisplay = filepath.ToSlash(relDestPathForDisplay) // For consistent display and map keys
+
+	action, err := decideFileWeavingAction(params, destPathInProject, relDestPathForDisplay)
+	if err != nil {
+		return false, err // Propagate errors from decision logic (e.g., prompt failure)
+	}
+
+	if action.shouldWrite {
+		data, readErr := os.ReadFile(pathInThreadSource)
+		if readErr != nil {
+			return false, fmt.Errorf("failed to read source file %s: %w", pathInThreadSource, readErr)
+		}
+		if writeErr := os.WriteFile(destPathInProject, data, sourceInfo.Mode()); writeErr != nil {
+			return false, fmt.Errorf("failed to write file %s: %w", destPathInProject, writeErr)
+		}
+		return true, nil
+	}
+	return false, nil
+}
+
+// determineThreadSourcePath calculates the absolute path to the thread's source directory (_thread).
+func determineThreadSourcePath(thread *project.Thread, projectRoot string) string {
+	if strings.HasPrefix(thread.Source, "project:") {
+		relativePath := strings.TrimPrefix(thread.Source, "project:")
+		return filepath.Join(projectRoot, relativePath, "_thread")
+	}
+	return filepath.Join(projectRoot, ".loom", thread.Name, "_thread")
+}
+
+// collectFilesToProcessForWeaving determines the set of files to process for a given thread.
+// Returns a map of [normalized directory relative to project] -> [list of filenames].
+func collectFilesToProcessForWeaving(
+	thread *project.Thread,
+	threadSourcePath string,
+	projectRoot string, // Not directly used here, but kept for potential future use or consistency
+	threadNameToWeave string,
+) (map[string][]string, error) {
+	filesToProcess := make(map[string][]string)
+
+	// If weaving a specific thread, and it's this thread, use its manifest.
+	if threadNameToWeave != "" && threadNameToWeave == thread.Name {
+		fmt.Printf("Weaving specific thread '%s'. Will only process files it owns as per %s.\n", thread.Name, project.YamlFileName)
+		if len(thread.Files) == 0 {
+			fmt.Printf("Thread '%s' does not own any files according to %s. Nothing to weave for this thread.\n", thread.Name, project.YamlFileName)
+			return filesToProcess, nil // Empty map, no error
+		}
+		for dir, filesInDir := range thread.Files {
+			normalizedDir := normalizeDir(dir) // Should be normalized already, but ensure.
+			filesToProcess[normalizedDir] = append(filesToProcess[normalizedDir], filesInDir...)
+		}
+	} else if threadNameToWeave == "" { // Weaving all threads - walk the source directory.
+		walkErr := filepath.Walk(threadSourcePath, func(path string, info os.FileInfo, walkErrInner error) error {
+			if walkErrInner != nil {
+				return walkErrInner // Propagate errors from previous WalkFunc calls
+			}
+			if info.IsDir() {
+				return nil // Skip directories
+			}
+			relPathFromSourceDir, err := filepath.Rel(threadSourcePath, path)
+			if err != nil {
+				// This error is critical for this file, wrap it with more context.
+				return fmt.Errorf("failed to get relative path for %s (base: %s): %w", path, threadSourcePath, err)
+			}
+			destDirRelToProject, fileName := filepath.Split(relPathFromSourceDir)
+			destDirNorm := normalizeDir(destDirRelToProject)
+			filesToProcess[destDirNorm] = append(filesToProcess[destDirNorm], fileName)
+			return nil
+		})
+		if walkErr != nil {
+			// Error during walk is significant for this thread's processing.
+			return nil, fmt.Errorf("error walking source directory for thread '%s' (%s): %w", thread.Name, threadSourcePath, walkErr)
+		}
+	}
+	// If threadNameToWeave is specific but NOT this thread, filesToProcess remains empty, which is correct.
+	return filesToProcess, nil
+}
+
+// processWeavingForThread handles the weaving logic for a single thread.
+func processWeavingForThread(
+	thread *project.Thread, // Pointer to the thread in loomConfig
+	loomConfig *project.LoomConfig,
+	projectRoot string,
+	threadNameToWeave string,
+) error {
+	// If weaving a specific thread, only proceed if this IS the thread.
+	if threadNameToWeave != "" && thread.Name != threadNameToWeave {
+		return nil // Not the target thread for a specific weave.
+	}
+
+	threadSourcePath := determineThreadSourcePath(thread, projectRoot)
+	if _, statErr := os.Stat(threadSourcePath); os.IsNotExist(statErr) {
+		fmt.Printf("Thread source directory not found for thread '%s': %s. Skipping this thread.\n", thread.Name, threadSourcePath)
+		return nil // Skip this thread, not a fatal error for the whole weave operation.
+	}
+
+	// If we are here, either weaving all, or (weaving specific AND this is the target thread).
+	fmt.Printf("Weaving thread '%s' from %s...\n", thread.Name, threadSourcePath)
+
+	filesToProcess, err := collectFilesToProcessForWeaving(thread, threadSourcePath, projectRoot, threadNameToWeave)
+	if err != nil {
+		// Error already has context from collectFilesToProcessForWeaving.
+		fmt.Printf("Failed to collect files for thread '%s': %v. Skipping this thread.\n", thread.Name, err)
+		return nil // Skip this thread.
+	}
+
+	// collectFilesToProcessForWeaving already prints a message if thread.Files is empty for a specific weave.
+	// if threadNameToWeave != "" && thread.Name == threadNameToWeave && len(filesToProcess) == 0 {
+	// 	// Message already printed by collectFilesToProcessForWeaving if thread.Files was empty.
+	// 	// If filesToProcess is empty for other reasons (e.g. manifest points to non-existent files),
+	// 	// the loop below will simply not run.
+	// 	// No explicit message needed here if collectFilesToProcess already informed.
+	// }
+
+	filesActuallyWrittenByThisThread := make(map[string][]string)
+
+	for dirToProcess, filesInDirToProcess := range filesToProcess { // dirToProcess is normalized
+		for _, fileToProcess := range filesInDirToProcess { // fileToProcess is just filename
+			relPathFromFileSource := filepath.Join(dirToProcess, fileToProcess) // Reconstruct relative path
+
+			params := processFileWeavingParams{
+				projectRoot:       projectRoot,
+				threadSourcePath:  threadSourcePath,
+				relPathFromSource: relPathFromFileSource,
+				currentThreadName: thread.Name,
+				threadNameToWeave: threadNameToWeave,
+				loomConfig:        loomConfig,
+			}
+
+			fileWasWritten, opErr := handleFileWeavingOperation(&params)
+			if opErr != nil {
+				// Propagate error if file operation failed critically
+				return fmt.Errorf("processing file '%s' for thread '%s': %w", relPathFromFileSource, thread.Name, opErr)
+			}
+
+			if fileWasWritten {
+				// dirToProcess is already normalized (e.g., "./" or "src/components/")
+				filesActuallyWrittenByThisThread[dirToProcess] = append(filesActuallyWrittenByThisThread[dirToProcess], fileToProcess)
+			}
+		}
+	}
+
+	// Update the thread's manifest in loomConfig with files it actually wrote/owns.
+	// This is critical: thread is a pointer, so loomConfig is directly updated.
+	thread.Files = filesActuallyWrittenByThisThread
+	if thread.Files == nil { // Should be handled by make(), but defensive.
+		thread.Files = make(map[string][]string)
+	}
+
+	return nil
+}
+
+
+
+================================================
+File: internal/core/globalconfig/globalconfig.go
+================================================
+// Package globalconfig manages the global Loom configuration file.
+// This file stores information about configured thread stores.
+package globalconfig
+
+import (
+	"fmt"
+	"os"
+	"path/filepath"
+	"runtime"
+
+	"gopkg.in/yaml.v3"
+)
+
+const (
+	// ConfigDirName is the name of the directory where Loom stores its global config.
+	ConfigDirName = "loom"
+	// ConfigFileName is the name of the global Loom configuration file.
+	ConfigFileName = "loom.yaml"
+)
+
+// Store represents a configured thread store.
+type Store struct {
+	Name string `yaml:"name"`
+	Type string `yaml:"type"` // e.g., "local", "github"
+	Path string `yaml:"path"` // For local type, this is the filesystem path. For github, a base URL.
+}
+
+// GlobalLoomConfig represents the structure of the global Loom configuration file.
+type GlobalLoomConfig struct {
+	Version string  `yaml:"version"`
+	Stores  []Store `yaml:"stores,omitempty"`
+}
+
+// GetGlobalConfigPath returns the absolute path to the global Loom configuration file.
+// It ensures the configuration directory exists. If LOOM_GLOBAL_DIR environment variable
+// is set, it will use that as the directory containing the config file.
+func GetGlobalConfigPath() (string, error) {
+	var configPath string
+
+	// Check if LOOM_GLOBAL_DIR environment variable is set
+	if envDir := os.Getenv("LOOM_GLOBAL_DIR"); envDir != "" {
+		configPath = envDir
+	} else {
+		switch runtime.GOOS {
+		case "windows":
+			userHomeDir, err := os.UserHomeDir()
+			if err != nil {
+				return "", fmt.Errorf("failed to get user home directory: %w", err)
+			}
+			configPath = filepath.Join(userHomeDir, ".config", "loom")
+		default: // Linux, macOS, etc.
+			userConfigDir, err := os.UserConfigDir()
+			if err != nil {
+				return "", fmt.Errorf("failed to get user config directory: %w", err)
+			}
+			configPath = filepath.Join(userConfigDir, "loom")
+		}
+	}
+
+	if err := os.MkdirAll(configPath, os.ModePerm); err != nil {
+		return "", fmt.Errorf("failed to create loom config directory at %s: %w", configPath, err)
+	}
+	return filepath.Join(configPath, ConfigFileName), nil
+}
+
+// LoadGlobalConfig loads the global Loom configuration from the default path.
+// If the file doesn't exist, it returns an empty GlobalLoomConfig with version 1.
+func LoadGlobalConfig() (*GlobalLoomConfig, error) {
+	configPath, err := GetGlobalConfigPath()
+	if err != nil {
+		return nil, err
+	}
+
+	var config GlobalLoomConfig
+	configData, err := os.ReadFile(configPath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			// File doesn't exist, return a new config
+			return &GlobalLoomConfig{Version: "1", Stores: []Store{}}, nil
+		}
+		return nil, fmt.Errorf("failed to read global config file %s: %w", configPath, err)
+	}
+
+	err = yaml.Unmarshal(configData, &config)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse global config file %s: %w", configPath, err)
+	}
+	if config.Stores == nil { // Ensure Stores is initialized if it was null in the YAML
+		config.Stores = []Store{}
+	}
+	return &config, nil
+}
+
+// SaveGlobalConfig saves the global Loom configuration to the default path.
+func SaveGlobalConfig(config *GlobalLoomConfig) error {
+	configPath, err := GetGlobalConfigPath()
+	if err != nil {
+		return err
+	}
+
+	updatedData, err := yaml.Marshal(config)
+	if err != nil {
+		return fmt.Errorf("failed to marshal global config: %w", err)
+	}
+
+	return os.WriteFile(configPath, updatedData, 0600) // 0600 for user read/write only
+}
+
+
+
+================================================
+File: internal/core/project/init.go
+================================================
+// Package project provides project initialization and management functionality
+package project
+
+import (
+	"fmt"
+	"os"
+	"path/filepath"
+	"strings" // Added missing import
+)
+
+// YamlFileName is the name of the loom configuration file
+const YamlFileName = "loom.yaml"
+
+// LoomConfig represents the structure of loom.yaml
+// Note: Renamed from Config to LoomConfig and Version type changed to string
+type LoomConfig struct {
+	Version string   `yaml:"version"`
+	Threads []Thread `yaml:"threads"`
+}
+
+// Thread represents a thread entry in loom.yaml
+type Thread struct {
+	Name   string              `yaml:"name"`
+	Source string              `yaml:"source"`
+	Files  map[string][]string `yaml:"files,omitempty"`
+}
+
+// IsFileOwned checks if a given file path is owned by any thread in the config.
+// It returns the name of the owning thread and true if owned, otherwise an empty string and false.
+func (lc *LoomConfig) IsFileOwned(filePath string, projectRoot string) (string, bool) {
+	relPath, err := filepath.Rel(projectRoot, filePath)
+	if err != nil {
+		// If we can't make it relative, assume it's not owned or handle error appropriately
+		return "", false
+	}
+	relPath = filepath.ToSlash(relPath) // Ensure consistent path separators
+
+	for _, thread := range lc.Threads {
+		if thread.Files == nil {
+			continue
+		}
+		for dir, files := range thread.Files {
+			// Normalize dir to ensure it ends with a slash if it's not "./"
+			normalizedDir := dir
+			if normalizedDir != "./" && !strings.HasSuffix(normalizedDir, "/") {
+				normalizedDir += "/"
+			}
+
+			for _, ownedFile := range files {
+				var fullOwnedPath string
+				if normalizedDir == "./" {
+					fullOwnedPath = ownedFile
+				} else {
+					fullOwnedPath = filepath.ToSlash(filepath.Join(normalizedDir, ownedFile))
+				}
+
+				if fullOwnedPath == relPath {
+					return thread.Name, true
+				}
+			}
+		}
+	}
+	return "", false
+}
+
+// InitProject initializes a new loom.yaml file in the current directory
+func InitProject() error {
+	// Check if loom.yaml already exists
+	if _, err := os.Stat(YamlFileName); err == nil { // Changed fileInfo to _
+		// File exists, check if it's empty or only comments/whitespace
+		content, err := os.ReadFile(YamlFileName)
+		if err != nil {
+			return fmt.Errorf("failed to read existing %s: %w", YamlFileName, err)
+		}
+
+		trimmedContent := strings.TrimSpace(string(content))
+		if trimmedContent != "" {
+			// Check if the content is only comments
+			lines := strings.Split(string(content), "\n")
+			isEmptyOrComments := true
+			for _, line := range lines {
+				trimmedLine := strings.TrimSpace(line)
+				if trimmedLine != "" && !strings.HasPrefix(trimmedLine, "#") {
+					isEmptyOrComments = false
+					break
+				}
+			}
+			if !isEmptyOrComments {
+				return fmt.Errorf("%s already exists and is not empty", YamlFileName)
+			}
+		}
+		// If we are here, the file exists but is empty or comments-only, so we can overwrite.
+	} else if !os.IsNotExist(err) {
+		// Some other error occurred when stating the file
+		return fmt.Errorf("failed to check for %s: %w", YamlFileName, err)
+	}
+
+	// Create a minimal loom.yaml content
+	// Note: Changed version to "1" (string)
+	contentString := `# loom.yaml - Loom project configuration file
+version: "1"
+threads: []
+` // Renamed content to contentString to avoid conflict
+
+	// Write the content to loom.yaml
+	errWrite := os.WriteFile(YamlFileName, []byte(contentString), 0644) // Used contentString and new err var
+	if errWrite != nil {
+		return fmt.Errorf("failed to create %s: %w", YamlFileName, errWrite)
+	}
+
+	return nil
+}
+
+// GetProjectRoot attempts to find the root of the project by locating loom.yaml
+// If not found, returns the current directory
+func GetProjectRoot() (string, error) {
+	// Start at the current directory
+	dir, err := os.Getwd()
+	if err != nil {
+		return "", fmt.Errorf("failed to get current directory: %w", err)
+	}
+
+	// Check if loom.yaml exists in the current directory
+	if _, err := os.Stat(filepath.Join(dir, YamlFileName)); err == nil {
+		return dir, nil
+	}
+
+	// For simplicity, just return the current directory if loom.yaml doesn't exist
+	// In the future, we might want to search up the directory tree for loom.yaml
+	return dir, nil
+}
+
+
+
+================================================
+File: test/e2e/e2e_suite_test.go
+================================================
+// Package e2e contains end-to-end tests for the Loom CLI tool.
+package e2e_test
+
+import (
+	"testing"
+
+	. "github.com/onsi/ginkgo/v2"
+	. "github.com/onsi/gomega"
+)
+
+// TestE2E runs the E2E test suite for the Loom CLI tool.
+func TestE2E(t *testing.T) {
+	RegisterFailHandler(Fail)
+	RunSpecs(t, "Loom E2E Suite")
+}
+
+
+
+================================================
+File: test/e2e/helpers_test.go
+================================================
+// Package e2e contains helper functions for end-to-end tests.
+package e2e_test
+
+import (
+	"fmt"
+	"os"
+	"path/filepath"
+
+	. "github.com/onsi/ginkgo/v2"
+	. "github.com/onsi/gomega"
+)
+
+// CreateTempDir creates a temporary directory for testing and returns its path.
+// The directory will be removed when the test completes.
+func CreateTempDir() string {
+	tempDir, err := os.MkdirTemp("", "loom-e2e-test-")
+	Expect(err).NotTo(HaveOccurred())
+
+	// Register cleanup using DeferCleanup
+	DeferCleanup(os.RemoveAll, tempDir)
+
+	return tempDir
+}
+
+// CreateTempFile creates a temporary file with the given content and returns its path.
+// The file will be removed when the test completes.
+func CreateTempFile(dir, name, content string) string {
+	filePath := filepath.Join(dir, name)
+	// Ensure the parent directory exists
+	parentDir := filepath.Dir(filePath)
+	err := os.MkdirAll(parentDir, 0755) // 0755 is a common permission for directories
+	Expect(err).NotTo(HaveOccurred())
+
+	err = os.WriteFile(filePath, []byte(content), 0644)
+	Expect(err).NotTo(HaveOccurred())
+
+	return filePath
+}
+
+// InitProjectLoomFile creates a basic loom.yaml file in the specified directory.
+func InitProjectLoomFile(dir string) string {
+	content := `version: "1"
+threads: []
+`
+	return CreateTempFile(dir, "loom.yaml", content)
+}
+
+// CreateTestThreadFile creates a dummy thread file for testing.
+// It takes the base directory (either project's .loom or a global store path),
+// the thread name, and the content for the thread file.
+func CreateTestThreadFile(baseDir, threadName, content string) string {
+	threadFilePath := filepath.Join(baseDir, threadName+".md")
+	err := os.MkdirAll(filepath.Dir(threadFilePath), 0755)
+	if err != nil {
+		panic(fmt.Sprintf("failed to create directory for test thread file: %v", err))
+	}
+	err = os.WriteFile(threadFilePath, []byte(content), 0644)
+	if err != nil {
+		panic(fmt.Sprintf("failed to write test thread file: %v", err))
+	}
+	return threadFilePath
+}
+
+// CreateGlobalStoreDir creates a store directory within the global loom directory.
+func CreateGlobalStoreDir(globalLoomDir, storeName string) string {
+	storePath := filepath.Join(globalLoomDir, "stores", storeName)
+	err := os.MkdirAll(storePath, 0755)
+	if err != nil {
+		panic(fmt.Sprintf("failed to create global store directory: %v", err))
+	}
+	return storePath
+}
+
+
+
+================================================
+File: test/e2e/loom_cli_test.go
+================================================
+// Package e2e contains end-to-end tests for the Loom CLI tool.
+package e2e_test
+
+import (
+	"fmt"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"regexp"
+	"runtime"
+	"strings"
+
+	. "github.com/onsi/ginkgo/v2"
+	. "github.com/onsi/gomega"
+	"github.com/onsi/gomega/gbytes"
+	"github.com/onsi/gomega/gexec"
+)
+
+var _ = Describe("Loom CLI", func() {
+	var loomExecutable string
+
+	BeforeEach(func() {
+		basePath, err := filepath.Abs("../..")
+		Expect(err).NotTo(HaveOccurred())
+
+		if runtime.GOOS == "windows" {
+			loomExecutable = filepath.Join(basePath, "build", "loom.exe")
+		} else {
+			loomExecutable = filepath.Join(basePath, "build", "loom")
+		}
+
+		Expect(loomExecutable).To(BeAnExistingFile(), "Loom executable not found at "+loomExecutable+". Make sure to build it before running tests.")
+	})
+
+	Describe("Basic CLI functionality", func() {
+		Context("when running 'loom' with no arguments", func() {
+			It("should output help information", func() {
+				command := exec.Command(loomExecutable)
+				session, err := gexec.Start(command, GinkgoWriter, GinkgoWriter)
+				Expect(err).NotTo(HaveOccurred())
+
+				Eventually(session).Should(gexec.Exit(0))
+
+				output := session.Buffer()
+				Expect(output).To(gbytes.Say("loom"))
+				Expect(output).To(Or(
+					gbytes.Say("USAGE:"),
+					gbytes.Say("Usage:"),
+					gbytes.Say("Commands:"),
+					gbytes.Say("options:"),
+				))
+			})
+		})
+	})
+
+	Describe("loom init functionality", func() {
+		var tempTestDir string
+
+		BeforeEach(func() {
+			tempTestDir = CreateTempDir()
+		})
+
+		Context("when 'loom.yaml' does not exist", func() {
+			It("should create 'loom.yaml' with default content and print a success message", func() {
+				command := exec.Command(loomExecutable, "init")
+				command.Dir = tempTestDir
+
+				session, err := gexec.Start(command, GinkgoWriter, GinkgoWriter)
+				Expect(err).NotTo(HaveOccurred())
+				Eventually(session).Should(gexec.Exit(0))
+
+				Expect(session.Out).To(gbytes.Say("Initialized empty Loom project with loom.yaml"))
+
+				loomYAMLPath := filepath.Join(tempTestDir, "loom.yaml")
+				Expect(loomYAMLPath).To(BeAnExistingFile())
+
+				yamlContent, err := os.ReadFile(loomYAMLPath)
+				Expect(err).NotTo(HaveOccurred())
+				Expect(string(yamlContent)).To(ContainSubstring("# loom.yaml - Loom project configuration file"))
+				Expect(string(yamlContent)).To(ContainSubstring("version: \"1\""))
+				Expect(string(yamlContent)).To(ContainSubstring("threads: []"))
+			})
+		})
+
+		Context("when 'loom.yaml' exists and is empty", func() {
+			BeforeEach(func() {
+				err := os.WriteFile(filepath.Join(tempTestDir, "loom.yaml"), []byte{}, 0644)
+				Expect(err).NotTo(HaveOccurred())
+			})
+
+			It("should overwrite 'loom.yaml' with default content and print a success message", func() {
+				command := exec.Command(loomExecutable, "init")
+				command.Dir = tempTestDir
+
+				session, err := gexec.Start(command, GinkgoWriter, GinkgoWriter)
+				Expect(err).NotTo(HaveOccurred())
+				Eventually(session).Should(gexec.Exit(0))
+
+				Expect(session.Out).To(gbytes.Say("Initialized empty Loom project with loom.yaml"))
+
+				loomYAMLPath := filepath.Join(tempTestDir, "loom.yaml")
+				yamlContent, err := os.ReadFile(loomYAMLPath)
+				Expect(err).NotTo(HaveOccurred())
+				Expect(string(yamlContent)).To(ContainSubstring("version: \"1\""))
+				Expect(string(yamlContent)).To(ContainSubstring("threads: []"))
+			})
+		})
+
+		Context("when 'loom.yaml' exists and contains only comments and whitespace", func() {
+			BeforeEach(func() {
+				content := "# This is a comment\n   \n# Another comment\n"
+				err := os.WriteFile(filepath.Join(tempTestDir, "loom.yaml"), []byte(content), 0644)
+				Expect(err).NotTo(HaveOccurred())
+			})
+
+			It("should overwrite 'loom.yaml' with default content and print a success message", func() {
+				command := exec.Command(loomExecutable, "init")
+				command.Dir = tempTestDir
+
+				session, err := gexec.Start(command, GinkgoWriter, GinkgoWriter)
+				Expect(err).NotTo(HaveOccurred())
+				Eventually(session).Should(gexec.Exit(0))
+
+				Expect(session.Out).To(gbytes.Say("Initialized empty Loom project with loom.yaml"))
+
+				loomYAMLPath := filepath.Join(tempTestDir, "loom.yaml")
+				yamlContent, err := os.ReadFile(loomYAMLPath)
+				Expect(err).NotTo(HaveOccurred())
+				Expect(string(yamlContent)).To(ContainSubstring("version: \"1\""))
+				Expect(string(yamlContent)).To(ContainSubstring("threads: []"))
+			})
+		})
+
+		Context("when 'loom.yaml' exists and is not empty", func() {
+			var existingContent string
+			BeforeEach(func() {
+				existingContent = "version: \"1\"\nthreads:\n  - name: existingThread\n    source: someSource"
+				err := os.WriteFile(filepath.Join(tempTestDir, "loom.yaml"), []byte(existingContent), 0644)
+				Expect(err).NotTo(HaveOccurred())
+			})
+
+			It("should fail, print an error message, and not modify the existing file", func() {
+				command := exec.Command(loomExecutable, "init")
+				command.Dir = tempTestDir
+
+				session, err := gexec.Start(command, GinkgoWriter, GinkgoWriter)
+				Expect(err).NotTo(HaveOccurred())
+				Eventually(session).Should(gexec.Exit(1))
+
+				Expect(session.Err).To(gbytes.Say("failed to initialize project: loom.yaml already exists and is not empty"))
+
+				loomYAMLPath := filepath.Join(tempTestDir, "loom.yaml")
+				yamlContent, err := os.ReadFile(loomYAMLPath)
+				Expect(err).NotTo(HaveOccurred())
+				Expect(string(yamlContent)).To(Equal(existingContent))
+			})
+		})
+
+		Context("when 'loom init' is run with extraneous arguments", func() {
+			It("should ignore the arguments and initialize the project successfully", func() {
+				command := exec.Command(loomExecutable, "init", "extraneousArg1", "--someflag")
+				command.Dir = tempTestDir
+
+				session, err := gexec.Start(command, GinkgoWriter, GinkgoWriter)
+				Expect(err).NotTo(HaveOccurred())
+				Eventually(session).Should(gexec.Exit(0))
+
+				Expect(session.Out).To(gbytes.Say("Initialized empty Loom project with loom.yaml"))
+
+				loomYAMLPath := filepath.Join(tempTestDir, "loom.yaml")
+				Expect(loomYAMLPath).To(BeAnExistingFile())
+				yamlContent, err := os.ReadFile(loomYAMLPath)
+				Expect(err).NotTo(HaveOccurred())
+				Expect(string(yamlContent)).To(ContainSubstring("version: \"1\""))
+			})
+		})
+	})
+
+	Describe("loom add functionality", func() {
+		var tempProjectDir string
+		var tempGlobalLoomDir string
+		var originalLoomGlobalDirEnv string
+		var mockStorePath string
+
+		BeforeEach(func() {
+			tempProjectDir = CreateTempDir()
+			tempGlobalLoomDir = CreateTempDir()
+			originalLoomGlobalDirEnv, _ = os.LookupEnv("LOOM_GLOBAL_DIR")
+			mockStorePath = filepath.Join(tempGlobalLoomDir, "myStore")
+			err := os.MkdirAll(mockStorePath, 0755)
+			Expect(err).NotTo(HaveOccurred())
+
+			globalConfigContent := `
+version: "1"
+stores:
+  - name: myStore
+    type: local
+    path: "` + filepath.ToSlash(mockStorePath) + `"
+`
+			err = os.WriteFile(filepath.Join(tempGlobalLoomDir, "loom.yaml"), []byte(globalConfigContent), 0644)
+			Expect(err).NotTo(HaveOccurred())
+		})
+
+		AfterEach(func() {
+			var err error
+			if originalLoomGlobalDirEnv == "" {
+				err = os.Unsetenv("LOOM_GLOBAL_DIR")
+			} else {
+				err = os.Setenv("LOOM_GLOBAL_DIR", originalLoomGlobalDirEnv)
+			}
+			Expect(err).NotTo(HaveOccurred())
+		})
+
+		Context("when adding a thread from a configured local store (happy path)", func() {
+			It("should copy thread files to the project and update project loom.yaml", func() {
+				mockThreadName := "myTestThread"
+				mockThreadSourceDir := filepath.Join(mockStorePath, mockThreadName, "_thread")
+				err := os.MkdirAll(mockThreadSourceDir, 0755)
+				Expect(err).NotTo(HaveOccurred())
+
+				CreateTempFile(mockThreadSourceDir, "file1.txt", "content of file1")
+				CreateTempFile(filepath.Join(mockThreadSourceDir, "subdir"), "file2.txt", "content of file2")
+
+				command := exec.Command(loomExecutable, "add", mockThreadName)
+				command.Dir = tempProjectDir
+
+				env := []string{}
+				for _, e := range os.Environ() {
+					if !strings.HasPrefix(e, "LOOM_GLOBAL_DIR=") {
+						env = append(env, e)
+					}
+				}
+				command.Env = append(env, "LOOM_GLOBAL_DIR="+tempGlobalLoomDir)
+
+				session, err := gexec.Start(command, GinkgoWriter, GinkgoWriter)
+				Expect(err).NotTo(HaveOccurred())
+				Eventually(session, "10s").Should(gexec.Exit(0))
+
+				Expect(session.Out).To(gbytes.Say("Thread 'myTestThread' added successfully from myStore"))
+
+				Expect(filepath.Join(tempProjectDir, "file1.txt")).To(BeAnExistingFile())
+				Expect(filepath.Join(tempProjectDir, "subdir", "file2.txt")).To(BeAnExistingFile())
+
+				projectLoomYAMLPath := filepath.Join(tempProjectDir, "loom.yaml")
+				Expect(projectLoomYAMLPath).To(BeAnExistingFile())
+				yamlContent, err := os.ReadFile(projectLoomYAMLPath)
+				Expect(err).NotTo(HaveOccurred())
+
+				Expect(string(yamlContent)).To(ContainSubstring("name: " + mockThreadName))
+				Expect(string(yamlContent)).To(ContainSubstring("source: myStore"))
+				Expect(string(yamlContent)).To(ContainSubstring("./:"))
+				Expect(string(yamlContent)).To(ContainSubstring("- file1.txt"))
+				Expect(string(yamlContent)).To(ContainSubstring("subdir/:"))
+				Expect(string(yamlContent)).To(ContainSubstring("- file2.txt"))
+			})
+		})
+
+		Context("when adding a thread that is malformed (e.g., _thread is a file)", func() {
+			It("should output an error and not add the thread", func() {
+				mockThreadName := "malformedThread"
+				mockThreadDir := filepath.Join(mockStorePath, mockThreadName)
+				err := os.MkdirAll(mockThreadDir, 0755)
+				Expect(err).NotTo(HaveOccurred())
+
+				CreateTempFile(mockThreadDir, "_thread", "this is a file, not a directory")
+
+				command := exec.Command(loomExecutable, "add", mockThreadName)
+				command.Dir = tempProjectDir
+
+				env := []string{}
+				for _, e := range os.Environ() {
+					if !strings.HasPrefix(e, "LOOM_GLOBAL_DIR=") {
+						env = append(env, e)
+					}
+				}
+				command.Env = append(env, "LOOM_GLOBAL_DIR="+tempGlobalLoomDir)
+
+				session, err := gexec.Start(command, GinkgoWriter, GinkgoWriter)
+				Expect(err).NotTo(HaveOccurred())
+				Eventually(session, "10s").Should(gexec.Exit(1))
+
+				rawExpectedErrorMsg := "thread path '" + filepath.Join(mockStorePath, mockThreadName, "_thread") + "' in store 'myStore' is a file, not a directory"
+				expectedErrorMsgForMatcher := regexp.QuoteMeta(rawExpectedErrorMsg)
+				Expect(session.Err).To(gbytes.Say(expectedErrorMsgForMatcher))
+
+				Expect(filepath.Join(tempProjectDir, "file1.txt")).NotTo(BeAnExistingFile())
+				Expect(filepath.Join(tempProjectDir, "_thread")).NotTo(BeAnExistingFile())
+
+				projectLoomYAMLPath := filepath.Join(tempProjectDir, "loom.yaml")
+				if _, err := os.Stat(projectLoomYAMLPath); err == nil {
+					yamlContent, readErr := os.ReadFile(projectLoomYAMLPath)
+					Expect(readErr).NotTo(HaveOccurred())
+					Expect(string(yamlContent)).NotTo(ContainSubstring("name: " + mockThreadName))
+				} else {
+					Expect(os.IsNotExist(err)).To(BeTrue(), "loom.yaml should not exist or error should be IsNotExist")
+				}
+			})
+		})
+	})
+
+	Describe("loom add command E2E Test Scenarios", func() {
+		var tempProjectDir string
+		var tempGlobalLoomDir string
+		var originalLoomGlobalDirEnv string
+		var loomExecPath string
+
+		BeforeEach(func() {
+			basePath, err := filepath.Abs("../..")
+			Expect(err).NotTo(HaveOccurred())
+
+			if runtime.GOOS == "windows" {
+				loomExecPath = filepath.Join(basePath, "build", "loom.exe")
+			} else {
+				loomExecPath = filepath.Join(basePath, "build", "loom")
+			}
+			Expect(loomExecPath).To(BeAnExistingFile(), "Loom executable not found at "+loomExecPath)
+
+			tempProjectDir = CreateTempDir()
+			tempGlobalLoomDir = CreateTempDir()
+			originalLoomGlobalDirEnv, _ = os.LookupEnv("LOOM_GLOBAL_DIR")
+
+			InitProjectLoomFile(tempProjectDir)
+		})
+
+		AfterEach(func() {
+			var err error
+			if originalLoomGlobalDirEnv == "" {
+				err = os.Unsetenv("LOOM_GLOBAL_DIR")
+			} else {
+				err = os.Setenv("LOOM_GLOBAL_DIR", originalLoomGlobalDirEnv)
+			}
+			Expect(err).NotTo(HaveOccurred())
+		})
+
+		runLoomAdd := func(args ...string) *gexec.Session {
+			command := exec.Command(loomExecPath, append([]string{"add"}, args...)...)
+			command.Dir = tempProjectDir
+			env := os.Environ()
+			filteredEnv := []string{}
+			for _, e := range env {
+				if !strings.HasPrefix(e, "LOOM_GLOBAL_DIR=") {
+					filteredEnv = append(filteredEnv, e)
+				}
+			}
+			command.Env = append(filteredEnv, "LOOM_GLOBAL_DIR="+tempGlobalLoomDir)
+			session, err := gexec.Start(command, GinkgoWriter, GinkgoWriter)
+			Expect(err).NotTo(HaveOccurred())
+			return session
+		}
+
+		Describe("Argument Parsing", func() {
+			Context("when running 'loom add' with no arguments", func() {
+				It("should fail with a usage message", func() {
+					session := runLoomAdd()
+					Eventually(session).Should(gexec.Exit(1))
+					Expect(session.Err).To(gbytes.Say("thread name or store/thread is required"))
+					Expect(session.Out.Contents()).To(BeEmpty())
+				})
+			})
+
+			Context("when running 'loom add /'", func() {
+				It("should fail due to invalid format (empty store and thread name)", func() {
+					session := runLoomAdd("/")
+					Eventually(session).Should(gexec.Exit(1))
+					Expect(session.Err).To(gbytes.Say(regexp.QuoteMeta("invalid format for store/thread: '/'. Both store name and thread name must be specified")))
+				})
+			})
+
+			Context("when running 'loom add store/'", func() {
+				It("should fail due to invalid format (missing thread name)", func() {
+					session := runLoomAdd("storeName/")
+					Eventually(session).Should(gexec.Exit(1))
+					Expect(session.Err).To(gbytes.Say(regexp.QuoteMeta("invalid format for store/thread: 'storeName/'. Both store name and thread name must be specified")))
+				})
+			})
+
+			Context("when running 'loom add /thread'", func() {
+				It("should fail due to invalid format (missing store name)", func() {
+					session := runLoomAdd("/threadName")
+					Eventually(session).Should(gexec.Exit(1))
+					Expect(session.Err).To(gbytes.Say(regexp.QuoteMeta("invalid format for store/thread: '/threadName'. Both store name and thread name must be specified")))
+				})
+			})
+		})
+
+		Describe("Thread Source and Resolution", func() {
+			var (
+				projectLoomDir string
+			)
+
+			BeforeEach(func() {
+				projectLoomDir = filepath.Join(tempProjectDir, ".loom")
+				err := os.MkdirAll(projectLoomDir, 0755)
+				Expect(err).NotTo(HaveOccurred())
+				InitProjectLoomFile(tempProjectDir)
+			})
+
+			Context("when a thread with the same name already exists in the project's .loom directory", func() {
+				It("should inform the user and not overwrite the existing thread", func() {
+					threadName := "myExistingThread"
+					threadPath := filepath.Join(projectLoomDir, threadName)
+					threadSourcePath := filepath.Join(threadPath, "_thread")
+					err := os.MkdirAll(threadSourcePath, 0755)
+					Expect(err).NotTo(HaveOccurred())
+
+					sampleFilePath := filepath.Join(threadSourcePath, "sample.txt")
+					err = os.WriteFile(sampleFilePath, []byte("This is a local thread."), 0644)
+					Expect(err).NotTo(HaveOccurred())
+
+					session := runLoomAdd(threadName)
+					Eventually(session).Should(gexec.Exit(0))
+					Expect(session.Out).To(gbytes.Say(regexp.QuoteMeta("Thread '" + threadName + "' added successfully from project:.loom/" + threadName)))
+
+					projectFilePath := filepath.Join(tempProjectDir, "sample.txt")
+					Expect(projectFilePath).To(BeAnExistingFile())
+					content, err := os.ReadFile(projectFilePath)
+					Expect(err).NotTo(HaveOccurred())
+					Expect(string(content)).To(Equal("This is a local thread."))
+				})
+			})
+
+			Context("when adding a thread by specifying an existing store name (e.g., loom add myStore/myTestThread)", func() {
+				var storePath string
+				BeforeEach(func() {
+					storePath = filepath.Join(tempGlobalLoomDir, "myStore")
+					err := os.MkdirAll(storePath, 0755)
+					Expect(err).NotTo(HaveOccurred())
+
+					threadName := "myTestThread"
+					threadPath := filepath.Join(storePath, threadName)
+					threadSourcePath := filepath.Join(threadPath, "_thread")
+
+					err = os.MkdirAll(threadSourcePath, 0755)
+					Expect(err).NotTo(HaveOccurred())
+
+					sampleFilePath := filepath.Join(threadSourcePath, "sample.txt")
+					err = os.WriteFile(sampleFilePath, []byte("Content from myStore."), 0644)
+					Expect(err).NotTo(HaveOccurred())
+
+					globalLoomConfigPath := filepath.Join(tempGlobalLoomDir, "loom.yaml")
+					configContent := fmt.Sprintf("version: \"1\"\nstores:\n  - name: myStore\n    type: local\n    path: %s\n", filepath.ToSlash(storePath))
+					err = os.WriteFile(globalLoomConfigPath, []byte(configContent), 0644)
+					Expect(err).NotTo(HaveOccurred())
+				})
+
+				It("should successfully add the thread from the specified global store", func() {
+					session := runLoomAdd("myStore/myTestThread")
+					Eventually(session).Should(gexec.Exit(0))
+					Expect(session.Out).To(gbytes.Say("myTestThread"))
+					Expect(session.Out).To(gbytes.Say("myStore"))
+
+					projectSamplePath := filepath.Join(tempProjectDir, "sample.txt")
+					Expect(projectSamplePath).To(BeAnExistingFile())
+					content, err := os.ReadFile(projectSamplePath)
+					Expect(err).NotTo(HaveOccurred())
+					Expect(string(content)).To(Equal("Content from myStore."))
+
+					projectLoomConfig, err := os.ReadFile(filepath.Join(tempProjectDir, "loom.yaml"))
+					Expect(err).NotTo(HaveOccurred())
+					Expect(string(projectLoomConfig)).To(ContainSubstring("name: myTestThread"))
+					Expect(string(projectLoomConfig)).To(ContainSubstring("source: myStore"))
+				})
+			})
+
+			Context("when the specified thread is not found in the specified store", func() {
+				var storePath string
+				BeforeEach(func() {
+					storePath = filepath.Join(tempGlobalLoomDir, "stores", "anotherStore")
+					err := os.MkdirAll(storePath, 0755)
+					Expect(err).NotTo(HaveOccurred())
+					globalLoomConfigPath := filepath.Join(tempGlobalLoomDir, "loom.yaml")
+					configContent := fmt.Sprintf("version: \"1\"\nstores:\n  - name: anotherStore\n    path: %s\n", storePath)
+					err = os.WriteFile(globalLoomConfigPath, []byte(configContent), 0644)
+					Expect(err).NotTo(HaveOccurred())
+				})
+
+				It("should fail and report that the thread was not found in the store", func() {
+					session := runLoomAdd("anotherStore/nonExistentThread")
+					Eventually(session).Should(gexec.Exit(1))
+					Expect(session.Err).To(gbytes.Say(regexp.QuoteMeta("thread 'nonExistentThread' not found in specified store 'anotherStore'")))
+				})
+			})
+
+			Context("when the specified store name does not exist in the global configuration", func() {
+				It("should fail and report that the store is not configured", func() {
+					globalLoomConfigPath := filepath.Join(tempGlobalLoomDir, "loom.yaml")
+					err := os.WriteFile(globalLoomConfigPath, []byte("stores: []"), 0644)
+					Expect(err).NotTo(HaveOccurred())
+
+					session := runLoomAdd("unknownStore/anyThread")
+					Eventually(session).Should(gexec.Exit(1))
+					Expect(session.Err).To(gbytes.Say(regexp.QuoteMeta("store 'unknownStore' not found in global configuration")))
+				})
+			})
+
+			Context("when the thread is not found in any configured store or project .loom/ folder (implicit resolution)", func() {
+				BeforeEach(func() {
+					globalLoomConfigPath := filepath.Join(tempGlobalLoomDir, "loom.yaml")
+					err := os.WriteFile(globalLoomConfigPath, []byte("stores: []"), 0644)
+					Expect(err).NotTo(HaveOccurred())
+				})
+				It("should fail and report that the thread could not be found", func() {
+					session := runLoomAdd("completelyMissingThread")
+					Eventually(session).Should(gexec.Exit(1))
+
+					Expect(session.Err).To(gbytes.Say("completelyMissingThread"))
+					Expect(session.Err).To(gbytes.Say("not found"))
+				})
+			})
+
+		})
+
+		Describe("File Conflict Handling", func() {
+		})
+
+		Describe("Project loom.yaml Manipulation", func() {
+		})
+
+		Describe("Extraneous Arguments", func() {
+		})
+	})
+})
+
+
+
+================================================
+File: .github/copilot-instructions.md
+================================================
+# AI Project Guidelines (Succinct)
+
+## 1. Preparation
+- Review docs/PRD.md (architecture, goals, tech stack, style), docs/digest.txt (current state), docs/TASKS.md (assignments).
+- If your task is missing in docs/TASKS.md, add a brief description and date.
+- Always review relevant code before changes.
+
+## 2. Implementation Planning
+- Before coding, provide: problem summary, high-level solution, steps, and risks.
+
+## 3. Development Workflow
+- Present your plan before coding.
+- Only address your assigned task; no unrelated refactoring.
+- Make minimal, clean, idiomatic changes. Avoid duplication; use helpers/modules.
+- Explain significant suggestions. Propose only low-risk refactoring.
+- Use only approved dependencies (see docs/PRD.md). No new/updated deps without approval.
+- Follow Conventional Commits for user tasks.
+- Give clear manual test instructions for changes.
+
+## 4. Folder Structure
+- Follow docs/PRD.md structure strictly. No file/folder changes without approval.
+- All source code in src/.
+
+## 5. Coding Standards
+- **Clarity:** Prioritize readable, well-named, and well-structured code. Comments explain "why" only.
+- **Simplicity:** Use the simplest solution. Prefer small, single-purpose functions/files.
+- **Concision:** Eliminate repetition and noise. Use idiomatic constructs.
+- **Maintainability:** Write code that's easy to modify. Handle errors robustly. Keep tests comprehensive.
+- **Consistency:** Match project/language style. Project rules override general best practices.
+- Use project formatter. Indent consistently. No spaces before function parentheses.
+- Prefer descriptive names; avoid repetition. Use is_/has_ for booleans. Use _ for ignored vars. Avoid single-letter names except for short-lived iterators.
+- Each file: header comment with title/purpose. Public APIs: docstrings. Comments explain rationale.
+- Type hint where practical (dynamic languages).
+
+## 6. Best Practices (Go)
+- **Naming:** Avoid repetition. Use context-appropriate, descriptive names. For test doubles, append 'test' to package name.
+- **Shadowing:** Avoid unintentional variable shadowing. Use new names if clarity improves.
+- **Util Packages:** Name packages for what they provide, not generic terms like 'util'.
+- **Imports:** Group: stdlib, project, (optional) protobuf, (optional) side-effect. Use descriptive import aliases.
+- **Error Handling:** Use structured errors. Wrap with %w for unwrapping. Avoid log spam and PII. Propagate init errors to main. Panic only for unrecoverable internal errors.
+- **Docs:** Document non-obvious params, concurrency, cleanup, and error conventions. Use godoc formatting.
+- **Testing:** Use table-driven tests. Keep helpers focused. Use t.Error for recoverable, t.Fatal for unrecoverable errors. Don't call t.Fatal from goroutines. Use field names in struct literals.
+- **Globals:** Avoid mutable global state. If necessary, provide instance-based APIs.
+
+## 7. AI Interaction Protocols
+- Your role: Senior Software Engineer. Audience: Mid-level engineers.
+- Ask clarifying questions if unclear. Verify facts; don't invent.
+- Don't delete/overwrite code unless tasked.
+- Report blockers/errors with context and solutions.
+- For complex tasks, suggest advanced model if needed.
+- Be clear when requirements are met. Mark task complete in docs/TASKS.md (user will update file).
+
+
+
+
+
+
+================================================
+File: .github/workflows/ci.yml
+================================================
+# CI workflow for lint, test, and coverage reporting (Coveralls)
+# Runs on all pushes and PRs
+
+name: Go CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    name: Test on Go ${{ matrix.go-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version: [ '1.23', '1.24' ]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Install Go tools
+        run: |
+          go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+          go install github.com/mattn/goveralls@latest
+
+      - name: Download Go modules
+        run: go mod download
+
+      - name: Lint source
+        run: golangci-lint run ./...
+
+      - name: Run tests with coverage
+        run: go test -v ./... -race -coverprofile=coverage.out -covermode=atomic
+
+
+
+
+
+
+================================================
+File: .loom/example_thread/README.md
+================================================
+# Example Thread
+
+This is a sample thread for the Loom scaffolding tool.
+
+It demonstrates the basic structure of a thread, including:
+- A `_thread/` directory containing files to be copied.
+- A `config.yml` for metadata.
+- This `README.md`.
+- A `LICENSE` file.
+
+
+
+
+
+
+================================================
+File: .loom/example_thread/LICENSE
+================================================
+MIT License
+
+Copyright (c) 2025 Loom Project Contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+
+
+
+
+================================================
+File: .loom/example_thread/config.yml
+================================================
+# thread_name/config.yml
+version: 1 # Version of the config.yml schema itself
+thread_version: "0.1.0" # Version of the thread's content
+metadata: # All metadata fields are optional
+  description: "An example thread to demonstrate Loom's capabilities."
+  author: "Loom AI Assistant <assistant@example.com>"
+  license: "MIT" # SPDX license identifier
+
+
+
+
+
+================================================
+File: .loom/example_thread/_thread/test.yaml
+================================================
+
+
+
+
+
+
+================================================
+File: .loom/example_thread/_thread/tests/test.xml
+================================================
+
+
+
+
+
+
+================================================
+File: .loom/threada/README.md
+================================================
+# Example Thread
+
+This is a sample thread for the Loom scaffolding tool.
+
+It demonstrates the basic structure of a thread, including:
+- A `_thread/` directory containing files to be copied.
+- A `config.yml` for metadata.
+- This `README.md`.
+- A `LICENSE` file.
+
+
+
+
+
+
+================================================
+File: .loom/threada/LICENSE
+================================================
+MIT License
+
+Copyright (c) 2025 Loom Project Contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+
+
+
+
+================================================
+File: .loom/threada/config.yml
+================================================
+# thread_name/config.yml
+version: 1 # Version of the config.yml schema itself
+thread_version: "0.1.0" # Version of the thread's content
+metadata: # All metadata fields are optional
+  description: "An example thread to demonstrate Loom's capabilities."
+  author: "Loom AI Assistant <assistant@example.com>"
+  license: "MIT" # SPDX license identifier
+
+
+
+
+
+================================================
+File: .loom/threada/_thread/test.yaml
+================================================
+
+
+
