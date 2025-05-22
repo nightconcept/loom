@@ -1,6 +1,7 @@
 Directory structure:
 └── loom/
     ├── README.md
+    ├── LICENSE
     ├── go.mod
     ├── go.sum
     ├── loom.yaml
@@ -69,7 +70,7 @@ Directory structure:
 ================================================
 File: README.md
 ================================================
-# Loom - Scaffolding Tool
+# Loom – Scaffolding Tool 🛠️
 
 ![License](https://img.shields.io/github/license/nightconcept/loom)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/nightconcept/loom/ci.yml)
@@ -77,6 +78,81 @@ File: README.md
 ![GitHub last commit](https://img.shields.io/github/last-commit/nightconcept/loom)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/nightconcept/loom/badge)](https://scorecard.dev/viewer/?uri=github.com/nightconcept/loom)
 [![Go Report Card](https://goreportcard.com/badge/github.com/nightconcept/loom)](https://goreportcard.com/report/github.com/nightconcept/loom)
+
+A modern, cross-platform, developer-friendly scaffolding tool for your projects.
+Easily generate project structures, files, and configurations from predefined or custom templates.
+
+## Features
+
+- 🚀 **Rapid Project Bootstrapping**: Quickly initialize new projects with consistent structures using templates.
+- 📝 **Customizable Blueprints**: Define your own templates and blueprints for any project type or component.
+- ⚙️ **Extensible CLI**: Easily add new commands and scaffolding logic to fit your workflow.
+- 🛠️ **Cross-Platform**: Works on Linux, macOS, and Windows.
+
+## Installation
+
+You can install `loom` by running the following commands in your terminal. These scripts will download and run the appropriate installer for your system from the `main` branch of the official repository.
+
+### macOS/Linux Install
+
+```sh
+curl -LsSf https://raw.githubusercontent.com/nightconcept/loom/main/install.sh | sh
+```
+
+### Windows Install
+
+```powershell
+powershell -ExecutionPolicy Bypass -c "irm https://raw.githubusercontent.com/nightconcept/loom/main/install.ps1 | iex"
+```
+
+## Usage
+
+```sh
+loom init                                           # Initialize a new loom.yaml file in the current directory
+loom add <thread_name>                              # Add a thread to the project. Syntax: loom add <thread_name> OR loom add <store_name>/<thread_name>
+loom remove <thread_name>                           # Remove a thread from the project
+loom list                                           # List threads in the project
+loom weave [thread_name]                            # Install or re-apply threads to the project. Optionally specify a thread name to weave only that thread.
+loom install [thread_name]                          # Alias for weave
+loom config                                         # Manage Loom's configuration for thread stores.
+```
+
+## Development Requirements
+
+- Go 1.24+
+- [Mise](https://mise.jdx.dev/)
+- [pre-commit](https://pre-commit.com/)
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
+
+
+================================================
+File: LICENSE
+================================================
+MIT License
+
+Copyright (c) 2025 Danny Solivan
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
 
 
@@ -4158,18 +4234,50 @@ jobs:
       - name: Lint source
         run: golangci-lint run ./...
 
-      - name: Build loom executable
-        run: go build -o build/loom ./cmd/loom
+      - name: Build loom executable (instrumented for coverage)
+        run: go build -cover -o build/loom ./cmd/loom
 
-      - name: Run tests with coverage
-        run: go test -v ./... -race -coverprofile=coverage.out -covermode=atomic
+      - name: Run tests and collect coverage
+        env:
+          GOCOVERDIR: ${{ github.workspace }}/coverage_data_e2e
+        run: |
+          mkdir -p ${{ github.workspace }}/coverage_data_e2e
+          # Unit/integration tests contribute to unit_integration_coverage.out.
+          # E2E tests running the instrumented 'build/loom' will have coverage data go to GOCOVERDIR.
+          go test -v ./... -race -coverprofile=unit_integration_coverage.out -covermode=atomic
+
+      - name: Prepare combined coverage report
+        run: |
+          E2E_COV_OUT_TMP_FILE="${{ github.workspace }}/e2e_coverage.tmp.out"
+          UNIT_INTEGRATION_COV_FILE="unit_integration_coverage.out"
+          FINAL_COV_FILE="final_coverage.out"
+
+          # Ensure E2E temp coverage file exists, even if empty, after attempting to generate it.
+          # This handles cases where no e2e binary tests were run or they produced no coverage.
+          (go tool covdata textfmt -i=${{ github.workspace }}/coverage_data_e2e -o=${E2E_COV_OUT_TMP_FILE} 2>/dev/null) || touch ${E2E_COV_OUT_TMP_FILE}
+
+          # Start the final coverage file with a single mode line
+          echo "mode: atomic" > ${FINAL_COV_FILE}
+
+          # Append content of unit_integration_coverage.out, skipping its mode line if present
+          if [ -s ${UNIT_INTEGRATION_COV_FILE} ]; then
+            # sed '1{/^mode: /d;}' will output the whole file, deleting the first line only if it matches /^mode: /
+            sed '1{/^mode: /d;}' ${UNIT_INTEGRATION_COV_FILE} >> ${FINAL_COV_FILE}
+          fi
+
+          # Append content of e2e_coverage.tmp.out, skipping its mode line if present
+          if [ -s ${E2E_COV_OUT_TMP_FILE} ]; then
+            sed '1{/^mode: /d;}' ${E2E_COV_OUT_TMP_FILE} >> ${FINAL_COV_FILE}
+          fi
+
+          rm -f ${E2E_COV_OUT_TMP_FILE}
 
       - name: Upload coverage to Coveralls
         if: matrix.go-version == '1.24' # Only upload from one Go version
         env:
           COVERALLS_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
         run: |
-          goveralls -coverprofile=coverage.out -service=github -repotoken $COVERALLS_TOKEN
+          goveralls -coverprofile=final_coverage.out -service=github -repotoken $COVERALLS_TOKEN
 
 
 

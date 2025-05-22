@@ -48,15 +48,47 @@ jobs:
       - name: Lint source
         run: golangci-lint run ./...
 
-      - name: Build loom executable
-        run: go build -o build/loom ./cmd/loom
+      - name: Build loom executable (instrumented for coverage)
+        run: go build -cover -o build/loom ./cmd/loom
 
-      - name: Run tests with coverage
-        run: go test -v ./... -race -coverprofile=coverage.out -covermode=atomic
+      - name: Run tests and collect coverage
+        env:
+          GOCOVERDIR: ${{ github.workspace }}/coverage_data_e2e
+        run: |
+          mkdir -p ${{ github.workspace }}/coverage_data_e2e
+          # Unit/integration tests contribute to unit_integration_coverage.out.
+          # E2E tests running the instrumented 'build/loom' will have coverage data go to GOCOVERDIR.
+          go test -v ./... -race -coverprofile=unit_integration_coverage.out -covermode=atomic
+
+      - name: Prepare combined coverage report
+        run: |
+          E2E_COV_OUT_TMP_FILE="${{ github.workspace }}/e2e_coverage.tmp.out"
+          UNIT_INTEGRATION_COV_FILE="unit_integration_coverage.out"
+          FINAL_COV_FILE="final_coverage.out"
+
+          # Ensure E2E temp coverage file exists, even if empty, after attempting to generate it.
+          # This handles cases where no e2e binary tests were run or they produced no coverage.
+          (go tool covdata textfmt -i=${{ github.workspace }}/coverage_data_e2e -o=${E2E_COV_OUT_TMP_FILE} 2>/dev/null) || touch ${E2E_COV_OUT_TMP_FILE}
+
+          # Start the final coverage file with a single mode line
+          echo "mode: atomic" > ${FINAL_COV_FILE}
+
+          # Append content of unit_integration_coverage.out, skipping its mode line if present
+          if [ -s ${UNIT_INTEGRATION_COV_FILE} ]; then
+            # sed '1{/^mode: /d;}' will output the whole file, deleting the first line only if it matches /^mode: /
+            sed '1{/^mode: /d;}' ${UNIT_INTEGRATION_COV_FILE} >> ${FINAL_COV_FILE}
+          fi
+
+          # Append content of e2e_coverage.tmp.out, skipping its mode line if present
+          if [ -s ${E2E_COV_OUT_TMP_FILE} ]; then
+            sed '1{/^mode: /d;}' ${E2E_COV_OUT_TMP_FILE} >> ${FINAL_COV_FILE}
+          fi
+
+          rm -f ${E2E_COV_OUT_TMP_FILE}
 
       - name: Upload coverage to Coveralls
         if: matrix.go-version == '1.24' # Only upload from one Go version
         env:
           COVERALLS_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
         run: |
-          goveralls -coverprofile=coverage.out -service=github -repotoken $COVERALLS_TOKEN
+          goveralls -coverprofile=final_coverage.out -service=github -repotoken $COVERALLS_TOKEN
