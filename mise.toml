@@ -27,10 +27,5 @@ run = [
   "go build -o build/loom.exe ./cmd/loom",
   "go test ./...",
   "gocyclo -over 15 .",
-  "gitingest -o docs/digest.txt -e *.toml,*.txt,.roo/*,.cursor/*,build/*,.devenv/*,.direnv/*,docs/digest.txt,docs/archive/* .",
-  # Corrected sed command to remove ALL trailing whitespace (including newlines)
-  # before appending a single newline with echo. This ensures exactly one trailing newline.
-  # The sed script ':a;N;$!ba;s/\s\+$//' slurps the file and removes trailing whitespace.
-  # Note: This sed command is Unix-style. It might require WSL or a sed compatible tool on Windows.
-  '''sed -i"" -e ":a;N;$!ba;s/\\s\\+$//" docs/digest.txt && echo. >> docs/digest.txt'''
+  "gitingest -o docs/digest.txt -e *.toml,*.txt,.roo/*,.cursor/*,build/*,.devenv/*,.direnv/*,docs/digest.txt,docs/archive/* ."
 ]
